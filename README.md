@@ -8,9 +8,11 @@
 ## Docker:
 - What is docker
 - Demo with simple hello wolrd service
+- Build Docker file
 
 ## CI/CD:
 - CI: Jenkins --> Demo using jenkins for Docker hello world
+- (OR) Build script using bash shell. Using that script for executing application
 
-## Markdown/ PlantURL:
+## Markdown/ PlantUML:
 - Document (English)
