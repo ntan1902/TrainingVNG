@@ -1,30 +1,47 @@
 package com.vng.demo.payment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vng.demo.Regex;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Card name, card holder name for identify bank name
  *
  * uid for identify user
  */
 public class Payment {
+    private int id;
 
     private String bankName;
     private String cardNumber;
     private String cardHolderName;
 
-    // CMND, CCCD, Passport
-    private TypeIdentity typeIdentity;
+    // CMND = 0
+    // CCCD = 1
+    // Passport = 2
+    private int typeIdentity;
     private String uid;
 
-    public Payment(String bankName,
-                   String cardNumber,
-                   String cardHolderName,
-                   TypeIdentity typeIdentity,
-                   String identityNumber) {
+    public Payment(@JsonProperty("bankName") String bankName,
+                   @JsonProperty("cardNumber") String cardNumber,
+                   @JsonProperty("cardHolderName") String cardHolderName,
+                   @JsonProperty("typeIdentity") int typeIdentity,
+                   @JsonProperty("uid") String uid) {
         this.bankName = bankName;
         this.cardNumber = cardNumber;
         this.cardHolderName = cardHolderName;
         this.typeIdentity = typeIdentity;
-        this.uid = identityNumber;
+        this.uid = uid;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getBankName() {
@@ -51,11 +68,11 @@ public class Payment {
         this.cardHolderName = cardHolderName;
     }
 
-    public TypeIdentity getTypeIdentity() {
+    public int getTypeIdentity() {
         return typeIdentity;
     }
 
-    public void setTypeIdentity(TypeIdentity typeIdentity) {
+    public void setTypeIdentity(int typeIdentity) {
         this.typeIdentity = typeIdentity;
     }
 
@@ -70,11 +87,27 @@ public class Payment {
     @Override
     public String toString() {
         return "Payment{" +
-                "bankName='" + bankName + '\'' +
+                "id=" + id +
+                ", bankName='" + bankName + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
                 ", cardHolderName='" + cardHolderName + '\'' +
                 ", typeIdentity=" + typeIdentity +
                 ", uid='" + uid + '\'' +
                 '}';
+    }
+
+    public boolean isValidBankName() {
+        return !this.bankName.isEmpty();
+    }
+
+    public boolean isValidCardNumber() {
+        switch(bankName) {
+            case "VCB":
+                return Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
+            case "SCB":
+                return Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
+            default:
+                return false;
+        }
     }
 }
