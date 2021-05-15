@@ -38,15 +38,11 @@ public class PaymentService {
     }
 
     public int addPayment(Payment payment) {
-        if(!payment.isValidBankName()) {
-            return 1;
+        int res = payment.isValid();
+        if(res == 0) {
+            return paymentDAO.insertPayment(payment);
         }
 
-        if(!payment.isValidCardNumber()) {
-            return 2;
-        }
-
-
-        return paymentDAO.insertPayment(payment);
+        return res;
     }
 }

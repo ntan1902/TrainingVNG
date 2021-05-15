@@ -96,18 +96,23 @@ public class Payment {
                 '}';
     }
 
+    public int isValid() {
+        if(!isValidBankName()) return 1;
+        if(!isValidCardNumber()) return 2;
+
+        return 0;
+    }
+
     public boolean isValidBankName() {
         return !this.bankName.isEmpty();
     }
 
     public boolean isValidCardNumber() {
-        switch(bankName) {
-            case "VCB":
-                return Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
-            case "SCB":
-                return Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
-            default:
-                return false;
-        }
+        return switch (bankName) {
+            case "VCB" -> Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
+            case "SCB" -> Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
+            case "OCB" -> Regex.checkRegex(this.cardNumber, "^((?!012))\\d{9}[13579]$");
+            default -> false;
+        };
     }
 }
