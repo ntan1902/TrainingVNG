@@ -108,11 +108,12 @@ public class Payment {
     }
 
     public boolean isValidCardNumber() {
-        return switch (bankName) {
-            case "VCB" -> Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
-            case "SCB" -> Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
-            case "OCB" -> Regex.checkRegex(this.cardNumber, "^((?!012))\\d{9}[13579]$");
-            default -> false;
-        };
+        switch (bankName) {
+            case "VCB" : Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
+            case "SCB" : Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
+            case "OCB" : Regex.checkRegex(this.cardNumber, "^((?!012))\\d{9}[13579]$");
+            default:
+                return false;
+        }
     }
 }

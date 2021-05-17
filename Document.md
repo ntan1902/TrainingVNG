@@ -56,7 +56,7 @@
       }
   }
   ```
-- Actual output:
+- Actual output:<br/>
 
   ![img.png](demoCamelName.png)
 
@@ -92,40 +92,121 @@
 - ADD does that too, but it also supports 2 other sources. First, we can use a URL instead of a local file / directory. Secondly, we can extract a tar file from the source directly into the destination.
 
 ### 3.5 Successfully build a Docker image with recommended security practice, and publish to Docker Hub
-- First of all, we need to log in to Docker Hub in terminal.
+- First of all, we need to log in to Docker Hub in terminal.<br/>
   ![img_5.png](img_5.png)
 
-- Create Dockerfile.
+- Create Dockerfile.<br/>
+  
   ![img_8.png](img_8.png)
 
-- Build docker.
+- Build docker.<br/>
   ![img_12.png](img_12.png)
 
-- Run image a033173305e2.
+- Run image a033173305e2.<br/>
   ![img_20.png](img_20.png)
 
-- Create a repository on DockerHub. (https://hub.docker.com/repository/create)
+- Create a repository on DockerHub. (https://hub.docker.com/repository/create)<br/>
   ![img_15.png](img_15.png)
   
-- After created, the repository would be like this.
+- After created, the repository would be like this.<br/>
   ![img_21.png](img_21.png)
 
-- Push to DockerHub.
+- Push to DockerHub.<br/>
   ![img_22.png](img_22.png)
   
   ![img_23.png](img_23.png)
 
-- Scan repository.
+- Scan repository.<br/>
   ![img_24.png](img_24.png)
   
-- Run repository.
+- Run repository.<br/>
   ![img_25.png](img_25.png)
 
+## 4. Git
 
+### 4.1 Basic concepts: stages, repository, tag, branch
+- Staging is an intermediate area where commits can be formatted and reviewed before completing the commit.
+- Repository is an area where the states of directories or files can be stored as a history change of content.<br/>
+  ![img_26.png](img_26.png)
+  
+- There is two type of repository: remote repository and local repository.
+  - Local repository: Repositories are on local computer of one person.
+  - Remote repository: Repositories are on remote server for several members to work together.<br/>
+  - ![img_28.png](img_28.png)
+
+- Tagging: Include Lightweight tag and Annotated tag.
+  - Lightweight tag: 
+    - It's like a branch, but it can not be changed, just a pointer to a specific commit.
+    - Syntax: `git tag <tag name>`.<br/>
+    - ![img_33.png](img_33.png)<br/>
+    - ![img_34.png](img_34.png)
+  - Annotated tag:
+    - Annotated tag is stored as full objects in Git database, contains the tagger name, email, and date, it has a tagging message.
+    - Syntax: `git tag -a <tag name>`<br/>
+    - ![img_35.png](img_35.png)
+  
+- Branching:
+  - Git allows and encourages us to have multiple branches that can be entirely independent of each other.
+  - Branch is used to separate working flow into several flows and store the history of every change.
+  - Syntax: `git branch`<br/>
+  - ![img_36.png](img_36.png)
+  
+  - Integration branch:
+    - Use for product version (branch master). Automation testing and building tools like Jenkins will use this branch.
+  - Topic branch:
+    - Use for development, fixing version. These branches are used when there are several topics which are going to develop in the same time.<br/>
+  - ![img_37.png](img_37.png)
+### 4.2 Basic command: status, commit, checkout, merge, rebase
+- Use `git init` to initialize git
+- Then use `git add .` to add the working directory into staging area.<br/>
+  ![img_27.png](img_27.png)
+
+- Use `git commit -m "..."` to push into repository.<br/>
+  ![img_29.png](img_29.png)
+
+- If we change something in `index.js`, then use `git status` to check the current change.<br/>
+  ![img_30.png](img_30.png)
+
+  ![img_31.png](img_31.png)
+
+  ![img_32.png](img_32.png)
+- If we want to discard change that we made, then use `git restore <file>`
+
+- Now we will create a branch called "bugFix"<br/>
+  ![img_39.png](img_39.png)
+  
+- From now, I will use (https://learngitbranching.js.org/) to visualize branches.<br/>
+  ![img_40.png](img_40.png)
+  
+  ###4.2.1 Merge
+  - Create two commits in branch bugFix, them merge main into bugFix (merge fast-forward). Use `git checkout <branch name>` to switch the branch. <br/>
+    
+    - ![img_41.png](img_41.png)
+    - ![img_42.png](img_42.png)
+    
+  - In another case, both branch main and bugFix have their commit. Then we will checkout main, merge bugFix to main.
+  - After that, checkout bugFix and merge main to bugFix.<br/>
+    ![img_43.png](img_43.png)
+    
+    ![img_44.png](img_44.png)
+  
+  ###4.2.2 Rebase
+  - The second way of combining work between branches is rebasing.
+  - Rebasing will rebuild the commit base of other branches and rewrite the new history commit.<br/>
+  - ![img_46.png](img_46.png) <br/>
+  - ![img_45.png](img_45.png)
+  - Both branch main and bugFix have their commit. We will checkout bugFix and rebase main to bugFix.<br/>
+  - ![img_47.png](img_47.png) <br/>
+  - ![img_48.png](img_48.png)
+  - After that, we will checkout main and rebase bugFix to main.<br/>
+  - ![img_49.png](img_49.png) <br/>
+  - ![img_50.png](img_50.png)
+  
+  
 
 ## Use the Vim text editor to modify text files. Write a basic shell script. Use the bash command to execute a shell script. Use chmod to make a script an executable program.
 - Create a helloWorld shell script (helloWorld.sh).
-- Use <b>Vim</b> to modify shell script file.
+- Use <b>Vim</b> to modify shell script file.<br/>
   
   ![img.png](img.png)
   
