@@ -39,33 +39,33 @@
 ### 2.4 Convert camel name to normal name:
 - Example: VoLamTruyenKy -> Vo Lam Truyen Ky
 - Demo with Java:
-```java
-public class Regex {
-    public static String convertCamelNameToNormalName(String camelName) {
-        // "VoLamTruyenKy" -> "Vo Lam Truyen Ky "
-        String res = camelName.replaceAll("[A-Z][a-z]*", "$0\s");
-
-        // Delete last white space in string -> "Vo Lam Truyen Ky"
-        return res.stripTrailing();
-    }
-    
-    public static void main(String[] args) {
-        String camelName = "VoLamTruyenKy";
-        String normalname = convertCamelNameToNormalName(camelName);
-        System.out.println(normalname);
-    }
-}
-```
+  ```java
+  public class Regex {
+      public static String convertCamelNameToNormalName(String camelName) {
+          // "VoLamTruyenKy" -> "Vo Lam Truyen Ky "
+          String res = camelName.replaceAll("[A-Z][a-z]*", "$0\s");
+  
+          // Delete last white space in string -> "Vo Lam Truyen Ky"
+          return res.stripTrailing();
+      }
+      
+      public static void main(String[] args) {
+          String camelName = "VoLamTruyenKy";
+          String normalname = convertCamelNameToNormalName(camelName);
+          System.out.println(normalname);
+      }
+  }
+  ```
 - Actual output:
 
-![img.png](demoCamelName.png)
+  ![img.png](demoCamelName.png)
 
 ## 3. Docker
-
 ### 3.1 Docker vs. VM:
+
 | <h2>Docker</h2> | <h2>VM</h2> |
 | ---- | ---- |
-| A tool that uses containers to make creation, deployment, and running of apllication a lot easier | A virtual machine is a system which acts exactly like a computer |
+| A tool that uses containers to make creation, deployment, and running of application a lot easier. It was written by Python ago, now is written by Golang. | A virtual machine is a system which acts exactly like a computer |
 | Less secure | More secure |
 | Easily portable | Take a lot of time to port a virtual machine because of its size |
 | OS level process isolation | Hardware-level process isolation|
@@ -91,7 +91,36 @@ public class Regex {
 - COPY takes in a src and destination. It only copies in a local file or directory from our host (the machine building the Docker image) into the Docker image itself.
 - ADD does that too, but it also supports 2 other sources. First, we can use a URL instead of a local file / directory. Secondly, we can extract a tar file from the source directly into the destination.
 
-### 3.5 Successfully build an Docker image with recommended security practice, and publish to Docker Hub
+### 3.5 Successfully build a Docker image with recommended security practice, and publish to Docker Hub
+- First of all, we need to log in to Docker Hub in terminal.
+  ![img_5.png](img_5.png)
+
+- Create Dockerfile.
+  ![img_8.png](img_8.png)
+
+- Build docker.
+  ![img_12.png](img_12.png)
+
+- Run image a033173305e2.
+  ![img_20.png](img_20.png)
+
+- Create a repository on DockerHub. (https://hub.docker.com/repository/create)
+  ![img_15.png](img_15.png)
+  
+- After created, the repository would be like this.
+  ![img_21.png](img_21.png)
+
+- Push to DockerHub.
+  ![img_22.png](img_22.png)
+  
+  ![img_23.png](img_23.png)
+
+- Scan repository.
+  ![img_24.png](img_24.png)
+  
+- Run repository.
+  ![img_25.png](img_25.png)
+
 
 
 ## Use the Vim text editor to modify text files. Write a basic shell script. Use the bash command to execute a shell script. Use chmod to make a script an executable program.
