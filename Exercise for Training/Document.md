@@ -105,6 +105,9 @@
 - Run image a033173305e2.<br/>
   ![img_20.png](images/img_20.png)
 
+- Now we have an image in local with CONTAINER ID. Use `docker ps -a` to see.
+  ![img_1.png](img_1.png)
+
 - Create a repository on DockerHub. (https://hub.docker.com/repository/create)<br/>
   ![img_15.png](images/img_15.png)
   
