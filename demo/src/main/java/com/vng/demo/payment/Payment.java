@@ -3,9 +3,6 @@ package com.vng.demo.payment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vng.demo.Regex;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Card name, card holder name for identify bank name
  *
@@ -96,22 +93,48 @@ public class Payment {
                 '}';
     }
 
-    public int isValid() {
-        if(!isValidBankName()) return 1;
-        if(!isValidCardNumber()) return 2;
-
-        return 0;
+    public ValidPayment isValid() {
+        if(!isValidBankName()) return ValidPayment.INVALID_BANK_NAME;
+        if(!isValidCardNumber()) return ValidPayment.INVALID_CARD_NUMBER;
+        if(!isValidCardHolderName()) return ValidPayment.INVALID_CARD_HOLDER_NAME;
+        if(!isValidTypeIdentity()) return ValidPayment.INVALID_TYPE_IDENTITY;
+        if(!isValidUid()) return ValidPayment.INVALID_UID;
+        return ValidPayment.SUCCESS;
     }
 
     public boolean isValidBankName() {
-        return !this.bankName.isEmpty();
+        return Regex.checkRegex(this.bankName, "[a-zA-Z ]+");
     }
 
     public boolean isValidCardNumber() {
-        switch (bankName) {
-            case "VCB" : Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
-            case "SCB" : Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
-            case "OCB" : Regex.checkRegex(this.cardNumber, "^((?!012))\\d{9}[13579]$");
+        switch (this.bankName) {
+            case "VCB" :
+                return Regex.checkRegex(this.cardNumber, "(^970436)(\\d{13}$)");
+            case "SCB" :
+                return Regex.checkRegex(this.cardNumber, "(^\\d{9})(678$)");
+            case "OCB" :
+                return Regex.checkRegex(this.cardNumber, "^((?!012))\\d{9}[13579]$");
+            default:
+                return false;
+        }
+    }
+
+    public boolean isValidCardHolderName(){
+        return Regex.checkRegex(this.cardHolderName, "^([A-Z ]+)$");
+    }
+
+    public boolean isValidTypeIdentity() {
+        return Regex.checkRegex(String.valueOf(this.typeIdentity), "^[012]$");
+    }
+
+    public boolean isValidUid() {
+        switch (this.typeIdentity) {
+            case 0 :
+                return Regex.checkRegex(this.uid, "^\\d{9}$");
+            case 1 :
+                return Regex.checkRegex(this.uid, "^\\d{12}$");
+            case 2:
+                return Regex.checkRegex(this.uid, "^[A-Z]\\d{7}$");
             default:
                 return false;
         }
