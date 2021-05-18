@@ -17,32 +17,13 @@ public class PaymentService {
 
     public List<Payment> getPayments() {
         return paymentDAO.selectAll();
-//        return List.of(
-//                new Payment(
-//                        1,
-//                        "VCB",
-//                        "9704366614626076016",
-//                        "NGUYEN TRINH AN",
-//                        0,
-//                        "026031189"
-//                ),
-//                new Payment(
-//                        2,
-//                        "AGB",
-//                        "9704050700236339",
-//                        "NGUYEN TRINH AN",
-//                        0,
-//                        "026031189"
-//                )
-//        );
     }
 
-    public int addPayment(Payment payment) {
-        int res = payment.isValid();
-        if(res == 0) {
-            return paymentDAO.insertPayment(payment);
+    public ValidPayment addPayment(Payment payment) {
+        ValidPayment res = payment.isValid();
+        if(res == ValidPayment.SUCCESS) {
+            paymentDAO.insertPayment(payment);
         }
-
         return res;
     }
 }

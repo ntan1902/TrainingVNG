@@ -28,18 +28,30 @@ public class PaymentController {
     public Map<String, String> addPayment(@RequestBody Payment payment) {
         Map<String, String> map = new HashMap<>();
 
-        int res = paymentService.addPayment(payment);
-        if(res == 0) {
+        ValidPayment res = paymentService.addPayment(payment);
+        if(res == ValidPayment.SUCCESS) {
             map.put("status", "200");
             map.put("message", "success");
-        } else if(res == 1) {
+        } else if(res == ValidPayment.INVALID_BANK_NAME) {
             map.put("status", "400");
             map.put("error", "Bad Request");
             map.put("message", "Invalid bank name");
-        } else if(res == 2) {
+        } else if(res == ValidPayment.INVALID_CARD_NUMBER) {
             map.put("status", "400");
             map.put("error", "Bad Request");
             map.put("message", "Invalid card number");
+        } else if(res == ValidPayment.INVALID_CARD_HOLDER_NAME) {
+            map.put("status", "400");
+            map.put("error", "Bad Request");
+            map.put("message", "Invalid card holder name");
+        } else if(res == ValidPayment.INVALID_TYPE_IDENTITY) {
+            map.put("status", "400");
+            map.put("error", "Bad Request");
+            map.put("message", "Invalid type identity");
+        } else if(res == ValidPayment.INVALID_UID) {
+            map.put("status", "400");
+            map.put("error", "Bad Request");
+            map.put("message", "Invalid uid");
         }
         return map;
     }
