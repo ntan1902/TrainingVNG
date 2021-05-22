@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class Card implements Serializable {
     @Id
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "code")
