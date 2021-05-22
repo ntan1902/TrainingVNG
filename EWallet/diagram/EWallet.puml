@@ -1,0 +1,27 @@
+@startuml
+
+entity user {
+    *id
+    name
+    phone_number
+}
+
+entity card {
+    user_id
+    code
+
+}
+
+entity bank {
+    *id
+    bank_name
+    code
+    holder_name
+    user_id
+}
+
+user --|| card
+user --o{ bank
+
+
+@enduml
