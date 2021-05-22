@@ -1,5 +1,7 @@
 package com.vng.ewallet.bank;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vng.ewallet.user.User;
 import lombok.*;
 
@@ -11,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "bank")
-public abstract class Bank implements Serializable {
+public class Bank implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +27,7 @@ public abstract class Bank implements Serializable {
     @Column(name = "holder_name")
     private String holderName;
     
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
-
-
 }
