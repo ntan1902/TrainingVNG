@@ -1,11 +1,15 @@
 package com.vng.ewallet.bank;
 
+import com.vng.ewallet.validation.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/bank")
@@ -27,11 +31,14 @@ public class BankController {
     }
 
     @PostMapping
-    public ResponseEntity<Bank> insertBank(@RequestBody Bank bank) {
-        Bank res = this.bankService.insertBank(bank);
-        if (res == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> insertBank(@Valid @RequestBody Bank bank, BindingResult result) {
+        Map<String, String> err = Validate.checkValidate(result);
+
+        if (err != null) {
+            return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+
+        Bank response = this.bankService.insertBank(bank);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

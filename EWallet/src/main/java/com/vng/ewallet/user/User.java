@@ -6,6 +6,7 @@ import com.vng.ewallet.bank.Bank;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,7 @@ public class User implements Serializable{
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name can not be blank")
     private String name;
 
     @Column(name = "phone_number")
