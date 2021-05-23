@@ -31,6 +31,16 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
+        User user = this.userService.findUserById(id);
+        if(user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping
     public ResponseEntity<?> insertUser(@Valid @RequestBody User user, BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
@@ -41,6 +51,26 @@ public class UserController {
 
         User res = this.userService.insertUser(user);
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User user,  BindingResult result) {
+        Map<String, String> err = Validate.checkValidate(result);
+
+        if (err != null) {
+            return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        }
+
+        User res = this.userService.updateUser(id, user);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        if(this.userService.deleteUser(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
