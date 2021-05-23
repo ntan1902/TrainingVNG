@@ -1,11 +1,15 @@
 package com.vng.ewallet.user;
 
+import com.vng.ewallet.validation.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -28,11 +32,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> insertUser(@RequestBody User user) {
-        User res = this.userService.insertUser(user);
-        if(res == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> insertUser(@Valid @RequestBody User user, BindingResult result) {
+        Map<String, String> err = Validate.checkValidate(result);
+
+        if (err != null) {
+            return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
         }
+
+        User res = this.userService.insertUser(user);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

@@ -16,7 +16,6 @@ public class ApiExceptionHandler {
         // 1. Create payload containing exception details.
         ApiException apiException = new ApiException(
                 e.getMessage(),
-                e,
                 httpStatus,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
