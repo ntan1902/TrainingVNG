@@ -1,4 +1,76 @@
 # 1.Compare HTTP/1.1 vs HTTP/2
+  ![img_11.png](img_11.png)
+## Delivery Models
+
+### HTTP/1.1 - Pipelining and Head-of-Line Blocking
+- When a client sends request HTTP GET to a website, the first response is often not the fully rendered page.
+- Instead. it contains links to additional resources needed by the requested page, and the client will have to make additional requests to retrieve these resources.
+- In HTTP/1.0, the client had to break and remake the TCP connection with every new request, a costly affair in terms of both time and resources.
+- In HTTP/1.1, this problem will be solved by the technique called persistent connections and pipelining.
+- The persistent-connection model keeps connections opened between successive requests, reducing the time needed to open new connections.
+- The HTTP pipelining model goes one step further, by sending several successive requests without even waiting for an answer, reducing much of the latency in the network.<br/>
+  ![img_7.png](img_7.png)
+
+- Since multiple data packets cannot pass each other when traveling to the same destination, there are situations in which a request at the head of the queue that cannot retrieve its required resource will block all the requests behind it. This is known as head-of-line (HOL) blocking.
+- Parallel TCP connections could handle this issue, but there are limits to the number of concurrent TCP connections possible between client and server, and each new connection requires significant resources.
+- POST requests should not be pipelined, GET requests can always be pipelined, PUT and DELETE can be pipelined or not.
+
+### HTTP/2 - Binary Framing Layer
+- In HTTP/2, the binary framing layer encodes requests/responses and cuts them up into smaller packets of information, greatly increasing the flexibility of data transfer. 
+- As above, HTTP/1.1 must make use of multiple TCP connections to decrease the effect of HOL blocking and first-in-first-out.
+- Instead, HTTP/2 creates a single connection object between the two machines. Within this connection there are multiple streams of data. Each stream consists of multiple messages in the familiar request/response format. Finally, each of these messages split into smaller units called frames.<br/>
+  ![img_8.png](img_8.png)
+  
+- HTTP/2 uses a process called multiplexing to resolve the head-of-line blocking issues in HTTP/1.1 by ensuring that no message has to wait for another to finish. This also means that servers and clients can send concurrent requests and responses, allowing for greater control and more efficient connection management.
+- However, multiple streams awaiting the same resource for handling can still cause performance issues.
+- Stream prioritization can solve this.
+
+### HTTP/2 - Stream Prioritization
+- Stream prioritization allows developers to customize the relative weight of requests for the same resource, but also allows developers to customize the relative weight of requests to better optimize application performance.
+- When a client sends concurrent requests to a server, it can prioritize the responses it is requesting by assigning a weight between 1 and 256 to each stream. The higher number indicates higher priority.<br/>
+  ![img_9.png](img_9.png)
+  
+## Buffer Overflow
+  ![img_10.png](img_10.png)
+
+### HTTP/1.1
+- Flow control relies on the underlying TCP connection. When this connection initiates, both client and server create their buffer sizes using their system default settings.
+- If the receiver’s buffer is partially filled with data, it will tell the sender its receive window, i.e., the amount of available space that remains in its buffer. This receive window is advertised in a signal known as an ACK packet, which is the data packet that the receiver sends to acknowledge that it received the opening signal. 
+- If this advertised receive window size is zero, the sender will send no more data until the client clears its internal buffer and then requests to resume data transmission. 
+- It is important to note here that using receive windows based on the underlying TCP connection can only implement flow control on either end of the connection and each new TCP connection requires a separate flow control mechanism.
+
+### HTTP/2
+- HTTP/2 multiplexes streams of data within a single TCP connection.
+- HTTP/2 solves the buffer overflow by allowing the client and server to implement their own flow controls, rather than relying on the transport layer.
+- The application layer communicates the available buffer space, allowing the client and server to set the receive window on the level of the multiplexed streams.
+- This fine-scale flow control can be modified or maintained after the initial connection via a WINDOW_UPDATE frame.
+
+## Predicting Resource Requests
+
+### HTTP/1.1 - Resource Inlining
+- Resource inlining is a technique to include the required resource directly within the HTML document that the server sends in response to the initial GET request.
+- However, there are a few problems with resource inlining, the larger files in non-text formats can greatly increase the size of the HTML document, which can ultimately decrease the connection speed and nullify the original advantage gained from using this technique.
+- Also, since the inlined resources are no longer separate from the HTML document, there is no mechanism for the client to decline resources that it already has, or to place a resource in its cache. If multiple pages require the resource, each new HTML document will have the same resource inlined in its code, leading to larger HTML documents and longer load times than if the resource were simply cached in the beginning.
+
+### HTTP/2 - Server Push
+- A server can send a resource to a client along with the requested HTML page, providing the resource before the client asks for it. This process is called server push.
+- In this way, an HTTP/2 connection can accomplish the same goal of resource inlining while maintaining the separation between the pushed resource and the document. This means that the client can decide to cache or decline the pushed resource separate from the main HTML document, fixing the major drawback of resource inlining.
+- This process begins when the server sends a PUSH_PROMISE frame to inform the client that it is going to push a resource. This frame includes only the header of the message, and allows the client to know ahead of time which resource the server will push. If it already has the resource cached, the client can decline the push by sending a RST_STREAM frame in response. The PUSH_PROMISE frame also saves the client from sending a duplicate request to the server, since it knows which resources the server is going to push.
+
+## Compression
+
+### HTTP/1.1
+- Programs like gzip have long been used to compress the data sent in HTTP messages, decrease the size of CSS and JavaScript files.
+- However, the header component of a message is always sent as plain text. It weighs heavier and heavier on the connection as more requests are made.
+- Additionally, the use of cookies can sometimes make headers much larger, increasing the need for some kind of compression.
+  ![img_12.png](img_12.png)
+
+
+### HTTP/2
+- HTTP/2 uses HPACK compression to shrink the size of headers.
+- HTTP/2 can split headers from their data, resulting in a header frame and a data frame.
+- This algorithm can encode the header metadata using Huffman coding, thereby greatly decreasing its size. Additionally, HPACK can keep track of previously conveyed metadata fields and further compress them according to a dynamically altered index shared between the client and the server.
+  ![img_13.png](img_13.png)
 
 # 2.Why gRPC perform better?
 

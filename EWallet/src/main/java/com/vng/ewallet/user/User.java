@@ -22,9 +22,9 @@ public class User implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "user_name")
     @NotBlank(message = "Name can not be blank")
-    private String name;
+    private String userName;
 
     @Column(name = "phone_number")
     private String phoneNumber;
