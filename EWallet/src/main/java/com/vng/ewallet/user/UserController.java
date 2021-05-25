@@ -1,5 +1,6 @@
 package com.vng.ewallet.user;
 
+import com.vng.ewallet.dto.BankUser;
 import com.vng.ewallet.validation.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+@RequestMapping(path = "/api/v1/users")
 public class UserController {
     private final UserService userService;
 
@@ -70,6 +71,15 @@ public class UserController {
         if(this.userService.deleteUser(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    @GetMapping("/{id}/banks")
+    public ResponseEntity<List<BankUser>> findBanks(@PathVariable("id") Long id) {
+        List<BankUser> bankUsers = this.userService.findBanks(id);
+        if(bankUsers != null) {
+            return new ResponseEntity<>(bankUsers, HttpStatus.OK);
+        }
+
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

@@ -1,5 +1,6 @@
 package com.vng.ewallet.user;
 
+import com.vng.ewallet.dto.BankUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +34,8 @@ public class UserService {
             user.setId(oldUser.getId());
 
             // Update name
-            if(user.getName() == null) {
-                user.setName(oldUser.getName());
+            if(user.getUserName() == null) {
+                user.setUserName(oldUser.getUserName());
             }
 
             // Update phone number
@@ -59,5 +60,9 @@ public class UserService {
         Optional<User> optionalUser = this.userRepository.findById(id);
         return optionalUser.orElse(null);
 
+    }
+
+    public List<BankUser> findBanks(Long id) {
+        return this.userRepository.findBanks(id);
     }
 }

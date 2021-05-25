@@ -4,14 +4,14 @@ import com.vng.ewallet.bank.Bank;
 import com.vng.ewallet.exception.ApiRequestException;
 import com.vng.ewallet.regex.Regex;
 
-public class OCBBank implements BankCheck{
+public class OCBBank implements BankCheck {
     @Override
     public void check(Bank bank) {
         if (!checkCode(bank.getCode())) {
-            throw new ApiRequestException("Invalid card number");
+            throw new ApiRequestException("Invalid bank code");
         }
         if (!checkHolderName(bank.getHolderName())){
-            throw new ApiRequestException("Invalid card holder name");
+            throw new ApiRequestException("Invalid bank holder name");
         }
     }
 

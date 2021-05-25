@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "api/v1/bank")
+@RequestMapping(path = "/api/v1/banks")
 public class BankController {
     private final BankService bankService;
 
