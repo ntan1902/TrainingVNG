@@ -624,6 +624,56 @@
   }
 ```
 
-# 6. Research HTTPs, SSL/TLS, SSL Certificate, Certificate pinning
-## 6.1. HTTPs:
-- 
+# 6. Research HTTPS, SSL/TLS, SSL Certificate, Certificate pinning
+## 6.1. HTTPS:
+- HTTP: Hypertext Transfer Protocol.
+- HTTPS: Hypertext Transfer Protocol Secure.
+- HTTPS is an extension of the HTTP. It is used for secure communication over a computer network, and is widely used on the Internet.
+- In HTTPS, the communication protocol is encrypted using Transport Layer Security (TLS) or, formerly, Secure Sockets Layer (SSL). The protocol is therefore also referred to as HTTP over TLS, or HTTP over SSL.<br/>
+  ![img_17.png](img_17.png)
+  
+- The principal motivations for HTTPS are authentication of the accessed website, and protection of the privacy and integrity of the exchanged data while in transit.
+- It protects against man-in-the-middle-attacks. The authentication aspect of HTTPs requires a trusted third party to sign server-side digital certificates.
+- HTTPS is now used more often by web users than the original non-secure HTTP, primarily to protect page authenticity on all types of websites, identity, and web browsing private.
+- HTTP is not encrypted and thus can let attackers gain access to website accounts and sensitive information, and modify webpages to inject malware or advertisements. HTTPS is designed to withstand such attacks and is considered secure against them.
+- To prepare a web server to accept HTTPS connections, the administrator must create a public key certificate for the web server. This certificate must be signed by a trusted certificate authority for the web browser to accept it without warning.
+- The authority certifies that the certificate holder is the operator of the web server that presents it.<br/>
+  ![img_18.png](img_18.png)
+  
+### 6.2 SSL/TLS, SSL Certificate:
+- SSL stands for Secure Sockets Layer and, in short, it's the standard technology for keeping an internet connection secure and safeguarding any sensitive data that is being sent between two systems, preventing criminals from reading and modifying any information transferred, including potential personal details.
+- The two systems can be a server and a client or server to server.<br/>
+  ![img_19.png](img_19.png)
+  
+- It's making sure that any data transferred between users and sites, or between two systems remain impossible to read.
+- It uses encryption algorithms to scramble data in transit, preventing hackers from reading it as it is sent over the connection.
+
+- TLS (Transport Layer Security) is an updated, more secure, version of SSL.
+- TLS works in much the same way as the SSL, using encryption to protect the transfer of data and information.
+- The TLS protocol comprises two layers: the TLS record and the TLS handshake protocols.
+
+- HTTPS appears in the URL when a website is secured by an SSL Certificate.
+- SSL certificates include:
+  - The domain name that the certificate was issued for
+  - Which person, organization, or device it was issued to
+  - Which certificate authority issued it
+  - The certificate authority's digital signature
+  - Associated subdomains
+  - Issue date of the certificate
+  - Expiration date of the certificate
+  - The public key (the private key is kept secret)
+  
+- The public and private keys used for SSL are essentially long strings of characters used for encrypting and decrypting data. Data encrypted with the public key can only be decrypted with the private key, and vice versa. It's an asymmetric encryption.
+
+### 6.3 Certificate Pinning:
+- Certificate pinning is the process of associating a host with their expected X.509 certificate (a standard defining the format of public key certificates) or public key.
+- When a certificate or public key is known or seen for a host, the certificate or public key is associated or 'pinned' to the host.
+- Clients connecting to that server will treat all other certificates as invalid and refuse to make an HTTPS connection.
+- Pinning allows websites to control the risk of CA compromise, or man-in-the-middle-attacks. Pinning takes multiple forms depending on the use case - We can pin our certificate as the only one in our client trust store or write the public key hash into our code so only my key is trusted.
+- When pinning started becoming popular, the hope was that these extra layers of complexity made it harder for bad actors to use certificates in attacks or spoofs.<br/>
+  ![img_20.png](img_20.png)
+  
+- Chrome and Firefox started allowing sites to use HTTP Public Key Pinning (HPKP) headers. The first time our browser connected to a website using HPKP, it recorded the public key from the header, and would only accept that key every time it connected to the site, up until the "max-age" defined in the HPKP policy. If a max-age of 60 days was set, no other keys would be accepted for the next 60 days.
+- However, in practice, Key Pinning turned out to cause more problems than it solved. It was frequently configured incorrectly by site owners, and they are blocked access to their own website or break connectivity in their application, with limited options for recourse.
+- Moreover, in the event of a site compromise, attackers could maliciously pin a certificate that the site owner didn't control.
+- Certificate Pining was deprecated in 2017, and was removed entirely from Chrome and Firefox in Nov. 2019. It was never supported to begin with by IE and Safari.
