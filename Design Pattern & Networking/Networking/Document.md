@@ -677,3 +677,4 @@
 - However, in practice, Key Pinning turned out to cause more problems than it solved. It was frequently configured incorrectly by site owners, and they are blocked access to their own website or break connectivity in their application, with limited options for recourse.
 - Moreover, in the event of a site compromise, attackers could maliciously pin a certificate that the site owner didn't control.
 - Certificate Pining was deprecated in 2017, and was removed entirely from Chrome and Firefox in Nov. 2019. It was never supported to begin with by IE and Safari.
+
