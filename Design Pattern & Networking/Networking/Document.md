@@ -1,4 +1,4 @@
-# 1.Compare HTTP/1.1 vs HTTP/2
+# 1. Compare HTTP/1.1 vs HTTP/2
   ![img_11.png](img_11.png)
 ## Delivery Models
 
@@ -72,9 +72,12 @@
 - This algorithm can encode the header metadata using Huffman coding, thereby greatly decreasing its size. Additionally, HPACK can keep track of previously conveyed metadata fields and further compress them according to a dynamically altered index shared between the client and the server.
   ![img_13.png](img_13.png)
 
-# 2.Why gRPC perform better?
-
-# 3.Implement gRPC service to add, update, delete users
+# 2. Why gRPC perform better?
+- REST is mostly implemented using HTTP/1.1.
+- gRPC uses HTTP/2 to support highly performance and scalable API's and makes use of binary data rather than just text which makes the communication more compact and more efficient.
+- gRPC allows to turn off message compression. This might be useful if you want to send an image that is already compressed. Compressing it again just takes up more time.
+- gRPC is also type-safe. This basically means that when the server expects an integer, gRPC won't allow you to send a string because these are two different types.
+# 3. Implement gRPC service to add, update, delete users
 
 - Create java project with Maven.
 - Import dependencies below.
@@ -381,8 +384,246 @@
   ![img_4.png](img_4.png)<br/>
   ![img_5.png](img_5.png)
   
-# 4.Design API for CGV app, in REST style, and RPC style
+# 4. Design API for CGV app, in REST style, and RPC style
 
-# 5.Research Symmetric/Asymmetric encryption
+# 5. Research Symmetric/Asymmetric encryption
 
-# 6.Research HTTPs, SSL/TLS, SSL Certificate, Certificate pinning
+## 5.1. Symmetric Encryption<br/>
+  ![img_14.png](img_14.png)
+
+- This is the simplest kind of encryption that involves only one secret key to cipher and decipher information
+- Symmetric encryption is an old and best-known technique. It uses a secret key that can either be a number, a word or a string of random letters.
+- It is a blended with the plain text of a message to change the content in a particular way. The sender and the recipient should know the secret key that is used to encrypt and decrypt all the messages.
+- Blowfish, AES, RC4, DES, RC5, and RC6 are examples of symmetric encryption. The most widely used symmetric algorithm is AES-128, AES-192, and AES-256.
+- The main disadvantage of the symmetric key encryption or shared key encryption is that all parties involved have to exchange the key used to encrypt the data before they can decrypt it.
+- A few key terms involved in cryptography, they are:
+  * **Plain text**: The plain text is the original message or data that is hidden from view through a cryptographic encryption algorithm.
+  * **Cipher text**: It is the output of Encryption operation when given key and plain text. It is also the data fed to a Decryption function.
+  * **Key**: The key is a piece of data or correlated pair of data when input with plain text into an encryption function yields ciphertext. The key must be secured as the algorithm is publicly available.
+  * **Salt**: A salt is a random piece of data when added to a hashing function, provides even more entropy in the output, making attacks to happen less likely. A good cryptographic hash should always use salt.<br/>
+  
+  ![img_16.png](img_16.png)
+
+### Example
+```java 
+  public class Symmetric {
+
+    private static final String AES = "AES";
+
+    // We are using a Block cipher(CBC mode).
+    private static final String AES_CIPHER_ALGORITHM = "AES/CBC/PKCS5PADDING";
+
+    // Function to create a secret key.
+    public SecretKey generateAESKey() throws Exception {
+        SecureRandom securerandom = new SecureRandom();
+        KeyGenerator keygenerator = KeyGenerator.getInstance(AES);
+
+        keygenerator.init(256, securerandom);
+        return keygenerator.generateKey();
+    }
+
+    // Function to initialize a vector with an arbitrary value.
+    public byte[] createInitializationVector() {
+
+        // Used with encryption
+        byte[] initializationVector = new byte[16];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(initializationVector);
+        return initializationVector;
+    }
+
+    // This function takes plaintext, the key with an initialization vector to convert plainText into CipherText.
+    public String AESEncrypt(
+            String plainText,
+            SecretKey secretKey,
+            byte[] initializationVector
+    ) throws Exception {
+        Cipher cipher = Cipher.getInstance(
+                AES_CIPHER_ALGORITHM
+        );
+
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(
+                initializationVector
+        );
+
+        cipher.init(
+                Cipher.ENCRYPT_MODE,
+                secretKey,
+                ivParameterSpec
+        );
+
+        byte[] cipherText = cipher.doFinal(
+                plainText.getBytes(
+                        StandardCharsets.UTF_8
+                )
+        );
+
+        return Base64.getEncoder().encodeToString(cipherText);
+    }
+
+    // This function performs the reverse operation of the AESEncryption function.
+    // It converts ciphertext to the plaintext using the key.
+    public String AESDecrypt(
+            String cipherText,
+            SecretKey secretKey,
+            byte[] initializationVector
+    ) throws Exception {
+        Cipher cipher = Cipher.getInstance(
+                AES_CIPHER_ALGORITHM
+        );
+
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(
+                initializationVector
+        );
+
+        cipher.init(
+                Cipher.DECRYPT_MODE,
+                secretKey,
+                ivParameterSpec
+        );
+
+        byte[] result = cipher.doFinal(
+                Base64.getDecoder().decode(cipherText)
+        );
+
+        return new String(result);
+    }
+
+  }  
+```
+### Test symmetric encryption
+```java 
+  public class Main {
+    public static void main(String[] args) throws Exception {
+        Symmetric symmetric = new Symmetric();
+
+        String plainText = "This is a message";
+
+        // Generate secret key
+        SecretKey symmetricKey = symmetric.generateAESKey();
+
+        // Generate the initialization vector that is required to avoid repetition during the encryption process.
+        byte[] initializationVector = symmetric.createInitializationVector();
+
+        // Encrypt message
+        String cipherText = symmetric.AESEncrypt(
+                plainText,
+                symmetricKey,
+                initializationVector
+        );
+
+        // Decrypt message
+        String decryptText = symmetric.AESDecrypt(
+                cipherText,
+                symmetricKey,
+                initializationVector
+        );
+
+        System.out.println(decryptText);
+    }
+  }
+```
+
+## 5.2 Asymmetric Encryption<br/>
+  ![img_15.png](img_15.png)
+
+- Asymmetric encryption is also known as public key cryptography, which is a relatively new method, compared to symmetric encryption.
+- Asymmetric encryption uses two keys to encrypt a plain text.
+- Secret keys are exchanged over the Internet or a large network. It ensures that malicious persons do not misuse the keys. It is important to note that anyone with a secret key can decrypt the message and this is why asymmetric encryption uses two related keys to boosting security.
+- A public key is made freely available to anyone who might want to send you a message. The second private key is kept a secret so that you can only know. 
+- A message that is encrypted using a public key can only be decrypted using a private key, while also, a message encrypted using a private key can be decrypted using a public key. Security of the public key is not required because it is publicly available and can be passed over the internet.
+- Asymmetric key has a far better power in ensuring the security of information transmitted during communication.
+- Asymmetric encryption is mostly used in day-to-day communication channels, especially over the Internet. Popular asymmetric key encryption algorithm includes EIGamal, RSA, DSA, Elliptic curve techniques, PKCS.
+
+### Example
+```java 
+  public class Asymmetric {
+    private static final String RSA = "RSA";
+
+    // Generating public and private keys using RSA algorithm.
+    public KeyPair generateRSAKeyPair() throws Exception {
+        SecureRandom secureRandom
+                = new SecureRandom();
+
+        KeyPairGenerator keyPairGenerator
+                = KeyPairGenerator.getInstance(RSA);
+
+        keyPairGenerator.initialize(
+                2048, secureRandom);
+
+        return keyPairGenerator
+                .generateKeyPair();
+    }
+
+    // Encryption function which converts the plainText into a cipherText using private Key.
+    public String RSAEncrypt(
+            String plainText,
+            PrivateKey privateKey
+    ) throws Exception {
+        Cipher cipher = Cipher.getInstance(RSA);
+
+        cipher.init(
+                Cipher.ENCRYPT_MODE,
+                privateKey
+        );
+
+        byte[] cipherText =  cipher.doFinal(
+                plainText.getBytes(StandardCharsets.UTF_8)
+        );
+
+        return Base64.getEncoder().encodeToString(cipherText);
+    }
+
+    // Decryption function which converts the ciphertext back to the original plaintext.
+    public String RSADecrypt(
+            String cipherText,
+            PublicKey publicKey
+    ) throws Exception {
+        Cipher cipher = Cipher.getInstance(RSA);
+
+        cipher.init(
+                Cipher.DECRYPT_MODE,
+                publicKey
+        );
+
+        byte[] result = cipher.doFinal(
+                Base64.getDecoder().decode(cipherText)
+        );
+
+        return new String(result);
+    }
+  }
+```
+
+### Test asymmetric encryption
+```java 
+  public class Main {
+    public static void main(String[] args) throws Exception {
+        Asymmetric asymmetric = new Asymmetric();
+
+        String plainText = "This is a message";
+
+        // Generate public & private keys.
+        KeyPair keypair = asymmetric.generateRSAKeyPair();
+
+        // Encrypt message
+        String cipherText = asymmetric.RSAEncrypt(
+                plainText,
+                keypair.getPrivate()
+        );
+
+        // Decrypt message
+        String decryptText = asymmetric.RSADecrypt(
+                cipherText,
+                keypair.getPublic()
+        );
+
+        System.out.println(decryptText);
+    }
+
+  }
+```
+
+# 6. Research HTTPs, SSL/TLS, SSL Certificate, Certificate pinning
+## 6.1. HTTPs:
+- 
