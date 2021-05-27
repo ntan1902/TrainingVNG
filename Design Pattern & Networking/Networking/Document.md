@@ -386,6 +386,111 @@
   
 # 4. Design API for CGV app, in REST style, and RPC style
 
+## 4.1 Design
+  ![img_22.png](img_22.png)
+
+- Link url: https://drive.google.com/file/d/1Uk0ZagLZmYXl-wsoC3s5nTihxLwG8_Rf/view?usp=sharing 
+
+## 4.2. Api
+
+### Movie
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllMovies?status=new| GET /v1/movies?status=new| Get several movies| 
+| GET /v1/getMovie/{id} | GET /v1/movies/{id} | Get a movie |
+| POST /v1/addMovie| POST /v1/movies| Add a new movie|
+| POST /v1/deleteMovie/{id}| DELETE /v1/movies/{id}| Delete a movie|
+| POST /v1/updateMovie/{id}| PUT /v1/movies/{id}| Update a movie|
+
+### Cinema
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllCinemas?status=new| GET /v1/cinema?status=new| Get several cinemas| 
+| GET /v1/getCinema/{id} | GET /v1/cinema/{id} | Get a cinema |
+| POST /v1/addCinema| POST /v1/cinema| Add a new cinema|
+| POST /v1/deleteCinema/{id}| DELETE /v1/cinema/{id}| Delete a cinema|
+| POST /v1/updateCinema/{id}| PUT /v1/cinema/{id}| Update a cinema|
+
+### Room
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllRooms?status=new| GET /v1/room?status=new| Get several rooms| 
+| GET /v1/getRoom/{id} | GET /v1/room/{id} | Get a room |
+| POST /v1/addRoom| POST /v1/room| Add a new room|
+| POST /v1/deleteRoom/{id}| DELETE /v1/room/{id}| Delete a room|
+| POST /v1/updateRoom/{id}| PUT /v1/room/{id}| Update a room|
+
+### Seat
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllSeats?status=new| GET /v1/seat?status=new| Get several seats| 
+| GET /v1/getSeat/{id} | GET /v1/seat/{id} | Get a seat |
+| POST /v1/addSeat| POST /v1/seat| Add a new seat|
+| POST /v1/deleteSeat/{id}| DELETE /v1/seat/{id}| Delete a seat|
+| POST /v1/updateSeat/{id}| PUT /v1/seat/{id}| Update a seat|
+
+### Artist
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllArtists| GET /v1/artists| Get several artists| 
+| GET /v1/getArtist/{id}| GET /v1/artists/{id} | Get an artist| 
+| POST /v1/addArtist| POST /v1/artists| Add a new artist|
+| POST /v1/deleteArtist/{id}| DELETE /v1/artists/{id}| Delete an artist|
+| POST /v1/updateArtist/{id}| PUT /v1/artists/{id}| Update an artist
+
+### Directors
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllDirectors| GET /v1/directors| Get several directors| 
+| GET /v1/getDirector/{id}| GET /v1/directors/{id} | Get a director| 
+| POST /v1/addDirector| POST /v1/directors| Add a new director|
+| POST /v1/deleteDirector/{id}| DELETE /v1/directors/{id}| Delete a director|
+| POST /v1/updateDirector/{id}| PUT /v1/directors/{id}| Update a director|
+
+### User
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllUsers| GET /v1/users| Get several users| 
+| GET /v1/getUser/{id}| GET /v1/users/{id} | Get an user| 
+| POST /v1/addUser| POST /v1/users| Add a new user|
+| POST /v1/deleteUser/{id}| DELETE /v1/users/{id}| Delete an user|
+| POST /v1/updateUser/{id}| PUT /v1/users/{id}| Update an user|
+| GET /v1/viewBills/{user_id}| GET /v1/users/{id}/bills| View bills of user|
+
+### Authentication:
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| POST /v1/login | POST /v1/authentication/login | Login|
+| POST /v1/signup| POST /v1/authentication/signup| Signup|
+
+### Censorship
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllCensorship| GET /v1/censorship| Get several censorship| 
+| GET /v1/getCensorship/{id}| GET /v1/censorship/{id} | Get a censorship| 
+| POST /v1/addCensorship| POST /v1/censorship| Add a new censorship|
+| POST /v1/deleteCensorship/{id}| DELETE /v1/censorship/{id}| Delete a censorship|
+| POST /v1/updateCensorship/{id}| PUT /v1/censorship/{id}| Update a censorship|
+
+### News
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllNews| GET /v1/news| Get several news| 
+| GET /v1/getNew/{id}| GET /v1/new/{id} | Get a new| 
+| POST /v1/addNew| POST /v1/new| Add a new new|
+| POST /v1/deleteNew/{id}| DELETE /v1/new/{id}| Delete a new|
+| POST /v1/updateNew/{id}| PUT /v1/new/{id}| Update a new|
+
+### Bill
+|RPC (Operation)| REST (Resource)| USAGE |
+| ---- |  -----  | ---- |
+| GET /v1/getAllBills| GET /v1/bills| Get several bills| 
+| GET /v1/getBill/{id}| GET /v1/bill/{id} | Get a bill| 
+| POST /v1/addBill| POST /v1/bill| Add a new bill|
+| POST /v1/deleteBill/{id}| DELETE /v1/bill/{id}| Delete a bill|
+| POST /v1/updateBill/{id}| PUT /v1/bill/{id}| Update a bill|
+| POST /v1/getSoldSeats/{id}| PUT /v1/bill/{id}/sold-seats| View sold seats of a bill|
+
 # 5. Research Symmetric/Asymmetric encryption
 
 ## 5.1. Symmetric Encryption<br/>
