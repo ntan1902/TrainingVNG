@@ -117,61 +117,43 @@
     ```xml
     <build>
         <defaultGoal>clean generate-sources compile install</defaultGoal>
-    
+
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.2</version>
+            </extension>
+        </extensions>
         <plugins>
-            <!-- compile proto file into java files. -->
             <plugin>
-                <groupId>com.github.os72</groupId>
-                <artifactId>protoc-jar-maven-plugin</artifactId>
-                <version>3.6.0.1</version>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:3.12.0:exe:${os.detected.classifier}</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.38.0:exe:${os.detected.classifier}</pluginArtifact>
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>generate-sources</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
                         </goals>
-                        <configuration>
-                            <includeMavenTypes>direct</includeMavenTypes>
-    
-                            <inputDirectories>
-                                <include>src/main/resources</include>
-                            </inputDirectories>
-    
-                            <outputTargets>
-                                <outputTarget>
-                                    <type>java</type>
-                                    <outputDirectory>src/main/java</outputDirectory>
-                                </outputTarget>
-                                <outputTarget>
-                                    <type>grpc-java</type>
-                                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.15.0</pluginArtifact>
-                                    <outputDirectory>src/main/java</outputDirectory>
-                                </outputTarget>
-                            </outputTargets>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-    
-    
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
         </plugins>
-    </build> 
+    </build>
     ```
-- Create `user.proto` in `./src/resources`
+- Create `user.proto` in `./src/main/proto`
     ```protobuf
     syntax = "proto3";
-    
-    option java_package = "grpc.user";
+
+    package com.grpc.user;
     option java_outer_classname = "UserGrpc";
+    option java_multiple_files = true;
     
     service UserService {
       rpc FindAllUsers(EmptyRequest) returns (AllUsersResponse);
@@ -187,7 +169,7 @@
     }
     
     message AllUsersResponse {
-    repeated UserItem users = 1;
+      repeated UserItem users = 1;
     }
     
     message UserItem {
@@ -208,7 +190,7 @@
   ![img.png](img.png)
 
 - After that, we will have files that protobuf generated for us.<br/>
-  ![img_1.png](img_1.png)
+  ![img_4.png](img_4.png)
 
 - Create UserService to handle the request relevant to User.<br/>
   ![img_2.png](img_2.png)
@@ -380,9 +362,9 @@
       }
     }
   ```
-- Test with BloomRPC.<br/>
-  ![img_4.png](img_4.png)<br/>
-  ![img_5.png](img_5.png)
+- Test with Insomnia.<br/>
+  ![img_21.png](img_21.png)<br/>
+  ![img_23.png](img_23.png)
   
 # 4. Design API for CGV app, in REST style, and RPC style
 
