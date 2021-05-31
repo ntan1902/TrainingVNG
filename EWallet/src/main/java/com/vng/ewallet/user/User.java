@@ -3,6 +3,7 @@ package com.vng.ewallet.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vng.ewallet.bank.Bank;
+import com.vng.ewallet.card.Card;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,8 +30,12 @@ public class User implements Serializable{
     @Column(name = "phone_number")
     private String phoneNumber;
 
-//    @OneToMany(targetEntity = Bank.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    private List<Bank> banks;
+    @OneToMany(targetEntity = Bank.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<Bank> banks;
+
+    @OneToOne(targetEntity = Card.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "card_id", referencedColumnName = "id")
+    private Card card;
 
 }

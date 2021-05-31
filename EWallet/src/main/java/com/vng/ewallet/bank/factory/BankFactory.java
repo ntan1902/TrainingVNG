@@ -17,6 +17,7 @@ public class BankFactory {
     private Map<String, BankCheck> initialize() {
         map.put("VCB", new VCBBank());
         map.put("SCB", new SCBBank());
+        map.put("OCB", new OCBBank());
         return map;
     }
 

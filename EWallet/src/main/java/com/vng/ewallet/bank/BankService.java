@@ -2,11 +2,8 @@ package com.vng.ewallet.bank;
 
 import com.vng.ewallet.bank.factory.BankFactory;
 import com.vng.ewallet.bank.factory.BankCheck;
-import com.vng.ewallet.exception.ApiRequestException;
-import com.vng.ewallet.user.User;
-import com.vng.ewallet.user.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +12,12 @@ import java.util.Optional;
 
 @Service
 public class BankService {
-    private final Logger logger = LoggerFactory.getLogger(BankService.class);
+    private final Logger logger = LogManager.getLogger(BankService.class);
     private final BankRepository bankRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public BankService(BankRepository bankRepository, UserRepository userRepository) {
+    public BankService(BankRepository bankRepository) {
         this.bankRepository = bankRepository;
-        this.userRepository = userRepository;
     }
 
     public List<Bank> findAllBanks() {
@@ -35,30 +30,46 @@ public class BankService {
         return null;
     }
 
+    public Bank findBankById(Long id) {
+        return this.bankRepository
+                .findById(id)
+                .orElse(null);
+    }
+
     public Bank insertBank(Bank bank) {
-        check(bank);
+        checkIfBankIsValidate(bank);
         return this.bankRepository.save(bank);
 
     }
 
-    private void check(Bank bank) {
-        checkIfUserIsExist(bank);
 
-        checkIfBankIsValidate(bank);
-    }
-
-    private void checkIfUserIsExist(Bank bank) {
-        Optional<User> optionalUser = userRepository.findById(bank.getUser().getId());
-
-        if(optionalUser.isPresent()) {
-            bank.setUser(optionalUser.get());
-        } else {
-            throw new ApiRequestException("User is not exist");
-        }
-    }
-
-    private void checkIfBankIsValidate(Bank bank) {
+    public void checkIfBankIsValidate(Bank bank) {
         BankCheck bankCheck = BankFactory.getBankCheck(bank.getBankName());
         bankCheck.check(bank);
+    }
+
+    public Bank updateBank(Long id, Bank bank) {
+        Optional<Bank> optionalBank = this.bankRepository.findById(id);
+        if(optionalBank.isPresent()) {
+            // Check validate new bank
+            checkIfBankIsValidate(bank);
+
+            return this.bankRepository.save(bank);
+        }
+
+        return null;
+    }
+
+    public boolean deleteBank(Long id) {
+        if(this.bankRepository.existsById(id)) {
+            this.bankRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean findBank(Bank bank) {
+        Bank optionalBank = this.bankRepository.findBankByCode(bank.getCode());
+        return optionalBank != null;
     }
 }

@@ -20,10 +20,10 @@ public class Card implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @NotNull(message = "User can not be undefined")
-    private User user;
+//    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+//    @NotNull(message = "User can not be undefined")
+//    private User user;
 
     @Column(name = "card_name")
     @NotBlank(message = "Card name can not be blank")

@@ -1,4 +1,4 @@
-package com.vng.ewallet.validation;
+package com.vng.ewallet.util;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

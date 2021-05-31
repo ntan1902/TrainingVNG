@@ -1,5 +1,5 @@
 # 1. Compare HTTP/1.1 vs HTTP/2
-  ![img_11.png](img_11.png)
+  ![img_11.png](img/img_11.png)
 ## Delivery Models
 
 ### HTTP/1.1 - Pipelining and Head-of-Line Blocking
@@ -9,7 +9,7 @@
 - In HTTP/1.1, this problem will be solved by the technique called persistent connections and pipelining.
 - The persistent-connection model keeps connections opened between successive requests, reducing the time needed to open new connections.
 - The HTTP pipelining model goes one step further, by sending several successive requests without even waiting for an answer, reducing much of the latency in the network.<br/>
-  ![img_7.png](img_7.png)
+  ![img_7.png](img/img_7.png)
 
 - Since multiple data packets cannot pass each other when traveling to the same destination, there are situations in which a request at the head of the queue that cannot retrieve its required resource will block all the requests behind it. This is known as head-of-line (HOL) blocking.
 - Parallel TCP connections could handle this issue, but there are limits to the number of concurrent TCP connections possible between client and server, and each new connection requires significant resources.
@@ -19,7 +19,7 @@
 - In HTTP/2, the binary framing layer encodes requests/responses and cuts them up into smaller packets of information, greatly increasing the flexibility of data transfer. 
 - As above, HTTP/1.1 must make use of multiple TCP connections to decrease the effect of HOL blocking and first-in-first-out.
 - Instead, HTTP/2 creates a single connection object between the two machines. Within this connection there are multiple streams of data. Each stream consists of multiple messages in the familiar request/response format. Finally, each of these messages split into smaller units called frames.<br/>
-  ![img_8.png](img_8.png)
+  ![img_8.png](img/img_8.png)
   
 - HTTP/2 uses a process called multiplexing to resolve the head-of-line blocking issues in HTTP/1.1 by ensuring that no message has to wait for another to finish. This also means that servers and clients can send concurrent requests and responses, allowing for greater control and more efficient connection management.
 - However, multiple streams awaiting the same resource for handling can still cause performance issues.
@@ -28,10 +28,10 @@
 ### HTTP/2 - Stream Prioritization
 - Stream prioritization allows developers to customize the relative weight of requests for the same resource, but also allows developers to customize the relative weight of requests to better optimize application performance.
 - When a client sends concurrent requests to a server, it can prioritize the responses it is requesting by assigning a weight between 1 and 256 to each stream. The higher number indicates higher priority.<br/>
-  ![img_9.png](img_9.png)
+  ![img_9.png](img/img_9.png)
   
 ## Buffer Overflow
-  ![img_10.png](img_10.png)
+  ![img_10.png](img/img_10.png)
 
 ### HTTP/1.1
 - Flow control relies on the underlying TCP connection. When this connection initiates, both client and server create their buffer sizes using their system default settings.
@@ -63,14 +63,14 @@
 - Programs like gzip have long been used to compress the data sent in HTTP messages, decrease the size of CSS and JavaScript files.
 - However, the header component of a message is always sent as plain text. It weighs heavier and heavier on the connection as more requests are made.
 - Additionally, the use of cookies can sometimes make headers much larger, increasing the need for some kind of compression.
-  ![img_12.png](img_12.png)
+  ![img_12.png](img/img_12.png)
 
 
 ### HTTP/2
 - HTTP/2 uses HPACK compression to shrink the size of headers.
 - HTTP/2 can split headers from their data, resulting in a header frame and a data frame.
 - This algorithm can encode the header metadata using Huffman coding, thereby greatly decreasing its size. Additionally, HPACK can keep track of previously conveyed metadata fields and further compress them according to a dynamically altered index shared between the client and the server.
-  ![img_13.png](img_13.png)
+  ![img_13.png](img/img_13.png)
 
 # 2. Why gRPC perform better?
 - REST is mostly implemented using HTTP/1.1.
@@ -187,13 +187,13 @@
     ```
 
 - Save file and build with Maven.<br/>
-  ![img.png](img.png)
+  ![img.png](img/img.png)
 
 - After that, we will have files that protobuf generated for us.<br/>
-  ![img_4.png](img_4.png)
+  ![img_4.png](img/img_4.png)
 
 - Create UserService to handle the request relevant to User.<br/>
-  ![img_2.png](img_2.png)
+  ![img_2.png](img/img_2.png)
   ```java 
     public class User {
       private Long id;
@@ -345,7 +345,7 @@
   ```
 
 - Create Server to listen request.<br/>
-  ![img_3.png](img_3.png)
+  ![img_3.png](img/img_3.png)
   ```java 
     public class GRPCServer {
       public static void main(String[] args) throws IOException, InterruptedException {
@@ -363,13 +363,13 @@
     }
   ```
 - Test with Insomnia.<br/>
-  ![img_21.png](img_21.png)<br/>
-  ![img_23.png](img_23.png)
+  ![img_21.png](img/img_21.png)<br/>
+  ![img_23.png](img/img_23.png)
   
 # 4. Design API for CGV app, in REST style, and RPC style
 
 ## 4.1 Design
-  ![img_22.png](img_22.png)
+  ![img_5.png](img/img_5.png)
 
 - Link url: https://drive.google.com/file/d/1Uk0ZagLZmYXl-wsoC3s5nTihxLwG8_Rf/view?usp=sharing 
 
@@ -476,7 +476,7 @@
 # 5. Research Symmetric/Asymmetric encryption
 
 ## 5.1. Symmetric Encryption<br/>
-  ![img_14.png](img_14.png)
+  ![img_14.png](img/img_14.png)
 
 - This is the simplest kind of encryption that involves only one secret key to cipher and decipher information
 - Symmetric encryption is an old and best-known technique. It uses a secret key that can either be a number, a word or a string of random letters.
@@ -489,7 +489,7 @@
   * **Key**: The key is a piece of data or correlated pair of data when input with plain text into an encryption function yields ciphertext. The key must be secured as the algorithm is publicly available.
   * **Salt**: A salt is a random piece of data when added to a hashing function, provides even more entropy in the output, making attacks to happen less likely. A good cryptographic hash should always use salt.<br/>
   
-  ![img_16.png](img_16.png)
+  ![img_16.png](img/img_16.png)
 
 ### Example
 ```java 
@@ -612,7 +612,7 @@
 ```
 
 ## 5.2 Asymmetric Encryption<br/>
-  ![img_15.png](img_15.png)
+  ![img_15.png](img/img_15.png)
 
 - Asymmetric encryption is also known as public key cryptography, which is a relatively new method, compared to symmetric encryption.
 - Asymmetric encryption uses two keys to encrypt a plain text.
@@ -717,7 +717,7 @@
 - HTTPS: Hypertext Transfer Protocol Secure.
 - HTTPS is an extension of the HTTP. It is used for secure communication over a computer network, and is widely used on the Internet.
 - In HTTPS, the communication protocol is encrypted using Transport Layer Security (TLS) or, formerly, Secure Sockets Layer (SSL). The protocol is therefore also referred to as HTTP over TLS, or HTTP over SSL.<br/>
-  ![img_17.png](img_17.png)
+  ![img_17.png](img/img_17.png)
   
 - The principal motivations for HTTPS are authentication of the accessed website, and protection of the privacy and integrity of the exchanged data while in transit.
 - It protects against man-in-the-middle-attacks. The authentication aspect of HTTPs requires a trusted third party to sign server-side digital certificates.
@@ -725,12 +725,12 @@
 - HTTP is not encrypted and thus can let attackers gain access to website accounts and sensitive information, and modify webpages to inject malware or advertisements. HTTPS is designed to withstand such attacks and is considered secure against them.
 - To prepare a web server to accept HTTPS connections, the administrator must create a public key certificate for the web server. This certificate must be signed by a trusted certificate authority for the web browser to accept it without warning.
 - The authority certifies that the certificate holder is the operator of the web server that presents it.<br/>
-  ![img_18.png](img_18.png)
+  ![img_18.png](img/img_18.png)
   
 ### 6.2 SSL/TLS, SSL Certificate:
 - SSL stands for Secure Sockets Layer and, in short, it's the standard technology for keeping an internet connection secure and safeguarding any sensitive data that is being sent between two systems, preventing criminals from reading and modifying any information transferred, including potential personal details.
 - The two systems can be a server and a client or server to server.<br/>
-  ![img_19.png](img_19.png)
+  ![img_19.png](img/img_19.png)
   
 - It's making sure that any data transferred between users and sites, or between two systems remain impossible to read.
 - It uses encryption algorithms to scramble data in transit, preventing hackers from reading it as it is sent over the connection.
@@ -758,7 +758,7 @@
 - Clients connecting to that server will treat all other certificates as invalid and refuse to make an HTTPS connection.
 - Pinning allows websites to control the risk of CA compromise, or man-in-the-middle-attacks. Pinning takes multiple forms depending on the use case - We can pin our certificate as the only one in our client trust store or write the public key hash into our code so only my key is trusted.
 - When pinning started becoming popular, the hope was that these extra layers of complexity made it harder for bad actors to use certificates in attacks or spoofs.<br/>
-  ![img_20.png](img_20.png)
+  ![img_20.png](img/img_20.png)
   
 - Chrome and Firefox started allowing sites to use HTTP Public Key Pinning (HPKP) headers. The first time our browser connected to a website using HPKP, it recorded the public key from the header, and would only accept that key every time it connected to the site, up until the "max-age" defined in the HPKP policy. If a max-age of 60 days was set, no other keys would be accepted for the next 60 days.
 - However, in practice, Key Pinning turned out to cause more problems than it solved. It was frequently configured incorrectly by site owners, and they are blocked access to their own website or break connectivity in their application, with limited options for recourse.

@@ -10,9 +10,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT new com.vng.ewallet.dto.BankUser(u.userName, b.bankName, b.code ) " +
-            "FROM User u " +
-            "JOIN Bank b ON u.id = b.user.id " +
-            "AND u.id=:id")
-    List<BankUser> findBanks(Long id);
+//    @Query("SELECT new com.vng.ewallet.dto.BankUser(u.userName, b.bankName, b.code ) " +
+//            "FROM User u JOIN u.banks b")
+//    List<BankUser> findBanks(Long id);
 }

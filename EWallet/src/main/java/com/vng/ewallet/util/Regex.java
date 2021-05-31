@@ -1,4 +1,4 @@
-package com.vng.ewallet.regex;
+package com.vng.ewallet.util;
 
 
 import java.util.regex.Matcher;

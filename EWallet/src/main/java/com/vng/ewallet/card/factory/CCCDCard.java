@@ -2,7 +2,7 @@ package com.vng.ewallet.card.factory;
 
 import com.vng.ewallet.card.Card;
 import com.vng.ewallet.exception.ApiRequestException;
-import com.vng.ewallet.regex.Regex;
+import com.vng.ewallet.util.Regex;
 
 public class CCCDCard implements CardCheck {
     @Override

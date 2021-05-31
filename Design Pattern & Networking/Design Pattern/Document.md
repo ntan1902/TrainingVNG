@@ -22,7 +22,7 @@
 ### 3.1. Simple Factory:
 - In this situation, let's use `Simple Factory` to solve it.    
 ### Diagram of Simple Factory:<br/>
-  ![img_13.png](img_13.png)  
+  ![img_13.png](img/img_13.png)  
 - Interface:<br/>
   ```java
   public interface Enemy {
@@ -129,7 +129,7 @@
 - To solve that situation, we will use `Factory Method` for refactoring.
 
 ### Diagram of Factory Method:<br/>
-  ![img_16.png](img_16.png)
+  ![img_16.png](img/img_16.png)
 
 - EnemyFactory interface:<br/>
   ```java

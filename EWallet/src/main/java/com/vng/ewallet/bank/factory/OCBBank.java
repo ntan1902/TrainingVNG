@@ -2,7 +2,7 @@ package com.vng.ewallet.bank.factory;
 
 import com.vng.ewallet.bank.Bank;
 import com.vng.ewallet.exception.ApiRequestException;
-import com.vng.ewallet.regex.Regex;
+import com.vng.ewallet.util.Regex;
 
 public class OCBBank implements BankCheck {
     @Override

@@ -1,7 +1,7 @@
 package com.vng.ewallet.user;
 
-import com.vng.ewallet.dto.BankUser;
-import com.vng.ewallet.validation.Validate;
+import com.vng.ewallet.bank.Bank;
+import com.vng.ewallet.util.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +25,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> findAllUsers() {
         List<User> users = this.userService.findAllUsers();
-        if(users.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if(!users.isEmpty()) {
+            return new ResponseEntity<>(users, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{id}")
@@ -46,24 +46,26 @@ public class UserController {
     public ResponseEntity<?> insertUser(@Valid @RequestBody User user, BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
 
-        if (err != null) {
-            return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        if (err == null) {
+            User res = this.userService.insertUser(user);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 
-        User res = this.userService.insertUser(user);
-        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User user,  BindingResult result) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id,
+                                        @Valid @RequestBody User user,
+                                        BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
 
-        if (err != null) {
-            return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+        if (err == null) {
+            User res = this.userService.updateUser(id, user);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
-        User res = this.userService.updateUser(id, user);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
@@ -74,13 +76,25 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("/{id}/banks")
-    public ResponseEntity<List<BankUser>> findBanks(@PathVariable("id") Long id) {
-        List<BankUser> bankUsers = this.userService.findBanks(id);
-        if(bankUsers != null) {
-            return new ResponseEntity<>(bankUsers, HttpStatus.OK);
+    public ResponseEntity<List<Bank>> findBanks(@PathVariable("id") Long id) {
+        List<Bank> banksUser = this.userService.findBanks(id);
+        if(banksUser != null) {
+            return new ResponseEntity<>(banksUser, HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping("/{id}/link-bank")
+    public ResponseEntity<Bank> linkBank(@PathVariable("id") Long id,
+                                         @Valid @RequestBody Bank bank,
+                                         BindingResult result){
+        Map<String, String> err = Validate.checkValidate(result);
+
+        if (err == null) {
+            Bank res = this.userService.linkBank(id, bank);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }
