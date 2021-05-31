@@ -384,6 +384,270 @@
 | POST /v1/deleteMovie/{id}| DELETE /v1/movies/{id}| Delete a movie|
 | POST /v1/updateMovie/{id}| PUT /v1/movies/{id}| Update a movie|
 
+#### GET /v1/getAllMovies?status, GET /v1/movies?status
+
+* Parameters:
+  
+|Name|Description|
+| ---- | ---- |
+|status| Status values that need to be considered for filter|
+
+* Responses:
+
+<table>
+  <tr>
+    <td>Code</td>
+    <td>Response</td>
+  </tr>  
+  
+  <tr>
+    <td>200</td>
+    <td>
+  <pre>
+  [
+    {
+      "id": 0,
+      "title": "string",
+      "description": "string",
+      "censorship": {
+        "id": 0,
+        "name": "string",
+        "code": "string"
+      },
+      "created_at": "datetime",
+      "duration": "string",
+      "language": "string",
+      "thumbnail": "string"
+      "photoUrl": "string",
+      "status": {
+        "id": 0,
+        "name": "string"
+      }
+    }
+  ]
+  Content-type: application/json
+
+  </pre>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>400</td>
+    <td>Invalid status value</td>
+  </tr>
+
+</table>
+
+#### GET /v1/getMovie/{id}, GET /v1/movies/{id}
+
+* Parameters:
+
+|Name|Description|
+| ---- | ---- |
+|id| Id of movie|
+
+* Responses:
+
+<table>
+  <tr>
+    <td>Code</td>
+    <td>Response</td>
+  </tr>  
+
+  <tr>
+    <td>200</td>
+    <td>
+  <pre>
+  {
+    "id": 0,
+    "title": "string",
+    "description": "string",
+    "censorship": {
+      "id": 0,
+      "name": "string",
+      "code": "string"
+    },
+    "created_at": "datetime",
+    "duration": "string",
+    "language": "string",
+    "thumbnail": "string"
+    "photoUrl": "string",
+    "status": {
+      "id": 0,
+      "name": "string"
+    }
+  }
+  Content-type: application/json
+  </pre>
+    </td>
+  </tr>
+
+  <tr>
+    <td>400</td>
+    <td>Invalid id</td>
+  </tr>
+
+</table>
+
+#### POST /v1/addMovie, POST /v1/movies
+* Parameters:
+
+<table>
+  <tr>
+    <td>Name</td>
+    <td>Description</td>
+  </tr>
+  
+  <tr>
+    <td>body</td>
+    <td>
+  <pre>
+  {
+    "id": 0,
+    "title": "string",
+    "description": "string",
+    "censorship": {
+      "id": 0,
+      "name": "string",
+      "code": "string"
+    },
+    "created_at": "datetime",
+    "duration": "string",
+    "language": "string",
+    "thumbnail": "string"
+    "photoUrl": "string",
+    "status": {
+      "id": 0,
+      "name": "string"
+    }
+  }
+  Content-type: application/json
+  </pre>
+    </td>
+  </tr>
+</table>
+
+* Responses:
+
+<table>
+  <tr>
+    <td>Code</td>
+    <td>Response</td>
+  </tr>  
+
+  <tr>
+    <td>405</td>
+    <td>Invalid input</td>
+  </tr>
+
+</table>
+
+#### POST /v1/deleteMovie/{id}, DELETE /v1/movies{id}
+* Parameters:
+
+<table>
+  <tr>
+    <td>Name</td>
+    <td>Description</td>
+  </tr>
+
+  <tr>
+    <td>id</td>
+    <td>Id of movie</td>
+  </tr>
+</table>
+
+* Responses:
+
+<table>
+  <tr>
+    <td>Code</td>
+    <td>Response</td>
+  </tr>  
+
+  <tr>
+    <td>400</td>
+    <td>Invalid Id</td>
+  </tr>
+
+  <tr>
+    <td>404</td>
+    <td>Movie not found</td>
+  </tr>
+
+
+</table>
+
+#### POST /v1/updateMovie/{id}, PUT /v1/movies{id}
+* Parameters:
+
+<table>
+  <tr>
+    <td>Name</td>
+    <td>Description</td>
+  </tr>
+
+  <tr>
+    <td>id</td>
+    <td>Id of movie</td>
+  </tr>
+
+  <tr>
+    <td>body</td>
+    <td>
+  <pre>
+  {
+    "title": "string",
+    "description": "string",
+    "censorship": {
+      "id": 0,
+      "name": "string",
+      "code": "string"
+    },
+    "created_at": "datetime",
+    "duration": "string",
+    "language": "string",
+    "thumbnail": "string"
+    "photoUrl": "string",
+    "status": {
+      "id": 0,
+      "name": "string"
+    }
+  }
+  Content-type: application/json
+  </pre>
+    </td>
+  </tr>
+</table>
+
+
+* Responses:
+
+<table>
+  <tr>
+    <td>Code</td>
+    <td>Response</td>
+  </tr>  
+
+  <tr>
+    <td>400</td>
+    <td>Invalid Id</td>
+  </tr>
+
+  <tr>
+    <td>404</td>
+    <td>Movie not found</td>
+  </tr>
+
+  <tr>
+    <td>405</td>
+    <td>Validation exception</td>
+  </tr>
+
+
+</table>
+
+
 ### Cinema
 |RPC (Operation)| REST (Resource)| USAGE |
 | ---- |  -----  | ---- |
@@ -471,8 +735,6 @@
 | POST /v1/addBill| POST /v1/bill| Add a new bill|
 | POST /v1/deleteBill/{id}| DELETE /v1/bill/{id}| Delete a bill|
 | POST /v1/updateBill/{id}| PUT /v1/bill/{id}| Update a bill|
-| POST /v1/getSoldSeats/{id}| PUT /v1/bill/{id}/sold-seats| View sold seats of a bill|
-
 # 5. Research Symmetric/Asymmetric encryption
 
 ## 5.1. Symmetric Encryption<br/>
