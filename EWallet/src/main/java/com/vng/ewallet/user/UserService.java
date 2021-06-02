@@ -90,13 +90,13 @@ public class UserService {
                 .orElse(null);
     }
 
-    public List<Bank> findBanks(Long id) {
-        log.info("Inside findBanks of UserService");
+    public List<Bank> findAllBanks(Long id) {
+        log.info("Inside findAllBanks of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
         if(optionalUser.isPresent()) {
             return optionalUser.map(User::getBanks).orElse(null);
         } else {
-            log.error("Inside findBanks of UserService: User doesn't exist");
+            log.error("Inside findAllBanks of UserService: User doesn't exist");
             throw new ApiRequestException("User doesn't exist");
         }
     }

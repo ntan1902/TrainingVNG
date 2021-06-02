@@ -5,16 +5,12 @@ import com.vng.ewallet.bank.BankService;
 import com.vng.ewallet.card.Card;
 import com.vng.ewallet.card.CardService;
 import com.vng.ewallet.exception.ApiRequestException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
 
@@ -38,16 +34,16 @@ class UserServiceTest {
 
     @Test
     void canFindAllUsers() {
-        // Exercise
+        // when
         underTest.findAllUsers();
 
-        // Verify
+        // then
         verify(userRepository).findAll();
     }
 
     @Test
     void canInsertUser() {
-        // Setup
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -66,9 +62,9 @@ class UserServiceTest {
                         "026031189"
                 )
         );
-        // Exercise
+        // when
         underTest.insertUser(user);
-        // Verify
+        // then
         ArgumentCaptor<User> userArgumentCaptor =
                 ArgumentCaptor.forClass(User.class);
 
@@ -81,7 +77,7 @@ class UserServiceTest {
 
     @Test
     void canInsertUserWithNullableBanks() {
-        // Setup
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -93,9 +89,9 @@ class UserServiceTest {
                         "026031189"
                 )
         );
-        // Exercise
+        // when
         underTest.insertUser(user);
-        // Verify
+        // then
         ArgumentCaptor<User> userArgumentCaptor =
                 ArgumentCaptor.forClass(User.class);
 
@@ -108,7 +104,7 @@ class UserServiceTest {
 
     @Test
     void canInsertUserWithNullableCard() {
-        // Setup
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -123,9 +119,9 @@ class UserServiceTest {
                 ),
                 null
         );
-        // Exercise
+        // when
         underTest.insertUser(user);
-        // Verify
+        // then
         ArgumentCaptor<User> userArgumentCaptor =
                 ArgumentCaptor.forClass(User.class);
 
@@ -137,7 +133,7 @@ class UserServiceTest {
 
     @Test
     void canUpdateUser(){
-        // Setup
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -177,10 +173,10 @@ class UserServiceTest {
                 )
         );
 
-        // Exercise
+        // when
         underTest.updateUser(user.getId(), updateUser);
 
-        // Verify
+        // then
         ArgumentCaptor<User> userArgumentCaptor =
                 ArgumentCaptor.forClass(User.class);
 
@@ -191,7 +187,7 @@ class UserServiceTest {
 
     @Test
     void canNotUpdateNotExistUser(){
-        // Setup
+        // given
         User updateUser = new User (
                 1L,
                 "On Hao Nguyen",
@@ -212,9 +208,9 @@ class UserServiceTest {
         );
         given(userRepository.findById(updateUser.getId())).willReturn(Optional.empty());
 
-        // Exercise
+        // when
 
-        // Verify
+        // then
         assertThatThrownBy(() -> underTest.updateUser(updateUser.getId(), updateUser))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("User doesn't exist");
@@ -224,16 +220,16 @@ class UserServiceTest {
 
     @Test
     void canFindUserById() {
-        // Exercise
+        // when
         underTest.findUserById(1L);
 
-        // Verify
+        // then
         verify(userRepository).findById(1L);
     }
 
     @Test
     void canDeleteUser(){
-        // Setup
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -254,21 +250,21 @@ class UserServiceTest {
         );
         given(userRepository.existsById(user.getId())).willReturn(true);
 
-        // Exercise
+        // when
         underTest.deleteUser(user.getId());
 
-        // Verify
+        // then
         verify(userRepository).deleteById(user.getId());
     }
 
     @Test
     void canNotDeleteNotExistUser(){
-        // Setup
+        // given
         given(userRepository.existsById(100L)).willReturn(false);
 
-        // Exercise
+        // when
 
-        // Verify
+        // then
         assertThatThrownBy(() -> underTest.deleteUser(100L))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("User doesn't exist");
@@ -276,8 +272,8 @@ class UserServiceTest {
 
     }
     @Test
-    void canFindBanksOfUser() {
-        // Setup
+    void canFindAllBanksOfUser() {
+        // given
         User user = new User (
                 1L,
                 "Nguyen Trinh An",
@@ -298,28 +294,28 @@ class UserServiceTest {
         );
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        // Exercise
-        List<Bank> banks = underTest.findBanks(user.getId());
+        // when
+        List<Bank> banks = underTest.findAllBanks(user.getId());
 
-        // Verify
+        // then
         assertThat(user.getBanks()).isEqualTo(banks);
 
     }
     @Test
-    void canNotFindBanksOfNotExistUser() {
-        // Setup
+    void canNotFindAllBanksOfNotExistUser() {
+        // given
 
-        // Exercise
+        // when
 
-        // Verify
-        assertThatThrownBy(() -> underTest.findBanks(1L))
+        // then
+        assertThatThrownBy(() -> underTest.findAllBanks(1L))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("User doesn't exist");
     }
 
     @Test
     void canLinkBank() {
-        // Setup
+        // given
         List<Bank> banks = new ArrayList<>();
         banks.add(new Bank(
                 1L,
@@ -351,25 +347,25 @@ class UserServiceTest {
         given(bankService.insertBank(newBank)).willReturn(newBank);
 //        given(user.getBanks().add(newBank)).willReturn(null);
 
-        // Exercise
+        // when
         underTest.linkBank(user.getId(), newBank);
 
-        // Verify
+        // then
         verify(userRepository).save(user);
     }
 
     @Test
     void canNotLinkBankOfNotExistUser() {
-        // Setup
+        // given
         Bank newBank = new Bank(
                 2L,
                 "SCB",
                 "950436661678",
                 "NGUYEN TRINH AN"
         );
-        // Exercise
+        // when
 
-        // Verify
+        // then
         assertThatThrownBy(() -> underTest.linkBank(1L, newBank))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("User doesn't exist");
@@ -377,7 +373,7 @@ class UserServiceTest {
 
     @Test
     void canNotLinkExistedBank() {
-        // Setup
+        // given
         List<Bank> banks = new ArrayList<>();
         banks.add(new Bank(
                 1L,
@@ -407,9 +403,9 @@ class UserServiceTest {
 
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
         given(bankService.findBank(newBank)).willReturn(true);
-        // Exercise
+        // when
 
-        // Verify
+        // then
         assertThatThrownBy(() -> underTest.linkBank(1L, newBank))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("Bank already exists");

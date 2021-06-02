@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> findAllUsers() {
         List<User> users = this.userService.findAllUsers();
-        if(!users.isEmpty()) {
+        if (!users.isEmpty()) {
             return new ResponseEntity<>(users, HttpStatus.OK);
         }
 
@@ -35,7 +35,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") Long id) {
         User user = this.userService.findUserById(id);
-        if(user != null) {
+        if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
 
@@ -43,7 +43,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertUser(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> insertUser(@Valid @RequestBody User user,
+                                        BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
 
         if (err == null) {
@@ -55,41 +56,37 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable("id") Long id,
-                                        @Valid @RequestBody User user,
-                                        BindingResult result) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @Valid @RequestBody User user, BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
-
         if (err == null) {
             User res = this.userService.updateUser(id, user);
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
-
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        if(this.userService.deleteUser(id)) {
+        if (this.userService.deleteUser(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/{id}/banks")
-    public ResponseEntity<List<Bank>> findBanks(@PathVariable("id") Long id) {
-        List<Bank> banksUser = this.userService.findBanks(id);
-        if(banksUser != null) {
+    public ResponseEntity<List<Bank>> findAllBanks(@PathVariable("id") Long id) {
+        List<Bank> banksUser = this.userService.findAllBanks(id);
+        if (banksUser != null) {
             return new ResponseEntity<>(banksUser, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/{id}/link-bank")
     public ResponseEntity<Bank> linkBank(@PathVariable("id") Long id,
                                          @Valid @RequestBody Bank bank,
-                                         BindingResult result){
+                                         BindingResult result) {
         Map<String, String> err = Validate.checkValidate(result);
-
         if (err == null) {
             Bank res = this.userService.linkBank(id, bank);
             return new ResponseEntity<>(res, HttpStatus.OK);
