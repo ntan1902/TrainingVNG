@@ -12,7 +12,7 @@ import java.util.Map;
 @Log4j2
 public class Validate {
     public static Map<String, String> checkValidate(BindingResult result) {
-        log.error("Inside checkValidate of Validate");
+        log.info("Inside checkValidate of Validate");
         if(result.hasErrors()) {
             Map<String, String> err = new HashMap<>();
 

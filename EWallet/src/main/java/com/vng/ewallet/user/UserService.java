@@ -40,19 +40,19 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    private void checkBanks(List<Bank> banks) {
+    public void checkBanks(List<Bank> banks) {
         log.info("Inside checkBanks of UserService");
         if(banks != null) {
             banks.forEach(bankService::checkIfBankIsValidate);
         }
     }
 
-    private void checkCard(Card card) {
+    public void checkCard(Card card) {
         log.info("Inside checkCard of UserService");
         if(card != null) {
             this.cardService.checkIfCardIsValidate(card);
         } else {
-            log.error("Inside checkCard of UserService: Card is null");
+            log.warn("Inside checkCard of UserService: Card is null");
         }
     }
 
@@ -68,8 +68,8 @@ public class UserService {
             return this.userRepository.save(user);
         } else {
             log.error("Inside updateUser of UserService: User doesn't exist");
+            throw new ApiRequestException("User doesn't exist");
         }
-        return null;
     }
 
     public boolean deleteUser(Long id) {
@@ -79,8 +79,8 @@ public class UserService {
             return true;
         } else {
             log.error("Inside deleteUser of UserService: User doesn't exist");
+            throw new ApiRequestException("User doesn't exist");
         }
-        return false;
     }
 
     public User findUserById(Long id) {
@@ -93,7 +93,12 @@ public class UserService {
     public List<Bank> findBanks(Long id) {
         log.info("Inside findBanks of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
-        return optionalUser.map(User::getBanks).orElse(null);
+        if(optionalUser.isPresent()) {
+            return optionalUser.map(User::getBanks).orElse(null);
+        } else {
+            log.error("Inside findBanks of UserService: User doesn't exist");
+            throw new ApiRequestException("User doesn't exist");
+        }
     }
 
     public Bank linkBank(Long id, Bank bank) {
@@ -106,9 +111,8 @@ public class UserService {
             // Check if bank exists in another account of user.
             if(this.bankService.findBank(bank)) {
                 log.error("Inside linkBank of UserService: Bank already exists");
-                throw new ApiRequestException("Bank already exists.");
+                throw new ApiRequestException("Bank already exists");
             }
-
             // Insert into bank table.
             this.bankService.insertBank(bank);
 
