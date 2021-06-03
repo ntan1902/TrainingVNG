@@ -1,8 +1,5 @@
 package com.vng.ewallet.user;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vng.ewallet.bank.Bank;
 import com.vng.ewallet.card.Card;
 import lombok.*;
@@ -10,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 @Entity

@@ -12,7 +12,6 @@ import java.util.Optional;
 @Service
 @Log4j2
 public class BankService {
-//    private final Logger log = LogManager.getLogger(BankService.class);
     private final BankRepository bankRepository;
 
     @Autowired
@@ -22,13 +21,8 @@ public class BankService {
 
     public List<Bank> findAllBanks() {
         log.info("Inside findAllBanks of BankService");
-        try {
-            return this.bankRepository.findAll();
+        return this.bankRepository.findAll();
 
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
     }
 
     public Bank findBankById(Long id) {
@@ -55,7 +49,7 @@ public class BankService {
     public Bank updateBank(Long id, Bank bank) {
         log.info("Inside updateBank of BankService");
         Optional<Bank> optionalBank = this.bankRepository.findById(id);
-        if(optionalBank.isPresent()) {
+        if (optionalBank.isPresent()) {
             // Check validate new bank
             checkIfBankIsValidate(bank);
             return this.bankRepository.save(bank);
@@ -68,7 +62,7 @@ public class BankService {
 
     public boolean deleteBank(Long id) {
         log.info("Inside deleteBank of BankService");
-        if(this.bankRepository.existsById(id)) {
+        if (this.bankRepository.existsById(id)) {
             this.bankRepository.deleteById(id);
             return true;
         } else {
