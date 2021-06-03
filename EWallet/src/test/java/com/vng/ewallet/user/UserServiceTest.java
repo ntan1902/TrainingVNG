@@ -220,11 +220,46 @@ class UserServiceTest {
 
     @Test
     void canFindUserById() {
+        // given
+        User user = new User (
+                1L,
+                "Nguyen Trinh An",
+                "0915422217",
+                Collections.singletonList(
+                        new Bank(
+                                1L,
+                                "VCB",
+                                "9704366614626076016",
+                                "NGUYEN TRINH AN"
+                        )
+                ),
+                new Card (
+                        1L,
+                        "CMND",
+                        "026031189"
+                )
+        );
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+
         // when
-        underTest.findUserById(1L);
+        User userById = underTest.findUserById(user.getId());
+
+        // then
+        verify(userRepository).findById(user.getId());
+        assertThat(userById).isEqualTo(user);
+    }
+
+    @Test
+    void canNotFindUserById() {
+        // given
+        given(userRepository.findById(1L)).willReturn(Optional.empty());
+
+        // when
+        User user = underTest.findUserById(1L);
 
         // then
         verify(userRepository).findById(1L);
+        assertThat(user).isNull();
     }
 
     @Test
@@ -344,7 +379,7 @@ class UserServiceTest {
 
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
         given(bankService.findBank(newBank)).willReturn(false);
-        given(bankService.insertBank(newBank)).willReturn(newBank);
+//        given(bankService.insertBank(newBank)).willReturn(newBank);
 //        given(user.getBanks().add(newBank)).willReturn(null);
 
         // when

@@ -1,6 +1,7 @@
 package com.vng.ewallet.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vng.ewallet.bank.Bank;
 import com.vng.ewallet.card.Card;
@@ -17,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-
 public class User implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +30,11 @@ public class User implements Serializable{
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToMany(targetEntity = Bank.class, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Bank.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Bank> banks;
 
-    @OneToOne(targetEntity = Card.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Card.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "card_id", referencedColumnName = "id")
     private Card card;
 

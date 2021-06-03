@@ -318,7 +318,8 @@ class UserControllerTest {
                 "NGUYEN TRINH AN"
         );
 
-        given(userService.linkBank(1L, bank)).willReturn(bank);
+        User user = new User(1L, "", "", Collections.singletonList(bank), null);
+        given(userService.linkBank(1L, bank)).willReturn(user);
 
         // when
         MockHttpServletResponse response = mockMvc.perform(
@@ -332,7 +333,7 @@ class UserControllerTest {
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
         assertThat(response.getContentAsString()).isEqualTo(
-                jsonBank.write(bank).getJson()
+                jsonUser.write(user).getJson()
         );
     }
 
