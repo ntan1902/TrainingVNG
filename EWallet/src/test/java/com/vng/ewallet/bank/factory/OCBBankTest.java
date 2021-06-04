@@ -1,7 +1,8 @@
 package com.vng.ewallet.bank.factory;
 
-import com.vng.ewallet.bank.Bank;
+import com.vng.ewallet.entity.Bank;
 import com.vng.ewallet.exception.ApiRequestException;
+import com.vng.ewallet.factory.bank.OCBBank;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

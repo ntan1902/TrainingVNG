@@ -1,13 +1,12 @@
 package com.vng.ewallet;
 
-import com.vng.ewallet.bank.Bank;
-import com.vng.ewallet.card.Card;
-import com.vng.ewallet.user.User;
-import com.vng.ewallet.user.UserRepository;
-import com.vng.ewallet.user.verticle.UserVerticle;
+import com.vng.ewallet.entity.Bank;
+import com.vng.ewallet.entity.Card;
+import com.vng.ewallet.entity.User;
+import com.vng.ewallet.entity.UserRepository;
+import com.vng.ewallet.verticle.user.UserVerticle;
 import io.vertx.core.Vertx;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,9 +24,7 @@ public class EWalletApplication implements CommandLineRunner {
         SpringApplication.run(EWalletApplication.class, args);
     }
 
-    @Autowired
-    private UserVerticle userVerticle;
-
+    private final UserVerticle userVerticle;
     @PostConstruct
     public void deployVerticle() {
         Vertx vertx = Vertx.vertx();

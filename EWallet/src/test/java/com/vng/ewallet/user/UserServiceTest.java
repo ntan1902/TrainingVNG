@@ -1,10 +1,13 @@
 package com.vng.ewallet.user;
 
-import com.vng.ewallet.bank.Bank;
-import com.vng.ewallet.bank.BankService;
-import com.vng.ewallet.card.Card;
-import com.vng.ewallet.card.CardService;
+import com.vng.ewallet.entity.Bank;
+import com.vng.ewallet.entity.User;
+import com.vng.ewallet.entity.UserRepository;
+import com.vng.ewallet.service.bank.impl.BankServiceImpl;
+import com.vng.ewallet.entity.Card;
+import com.vng.ewallet.service.card.impl.CardServiceImpl;
 import com.vng.ewallet.exception.ApiRequestException;
+import com.vng.ewallet.service.user.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,14 +26,14 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     @InjectMocks
-    private UserService underTest;
+    private UserServiceImpl underTest;
 
     @Mock
     private UserRepository userRepository;
     @Mock
-    private CardService cardService;
+    private CardServiceImpl cardService;
     @Mock
-    private BankService bankService;
+    private BankServiceImpl bankService;
 
     @Test
     void canFindAllUsers() {
@@ -378,7 +381,7 @@ class UserServiceTest {
         );
 
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
-        given(bankService.findBank(newBank)).willReturn(false);
+        given(bankService.findBankByCode(newBank.getCode())).willReturn(false);
 //        given(bankService.insertBank(newBank)).willReturn(newBank);
 //        given(user.getBanks().add(newBank)).willReturn(null);
 
@@ -437,12 +440,43 @@ class UserServiceTest {
         );
 
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
-        given(bankService.findBank(newBank)).willReturn(true);
+        given(bankService.findBankByCode(newBank.getCode())).willReturn(true);
         // when
 
         // then
         assertThatThrownBy(() -> underTest.linkBank(1L, newBank))
                 .isInstanceOf(ApiRequestException.class)
                 .hasMessageContaining("Bank already exists");
+    }
+
+    @Test
+    void canNotLinkInvalidBank() {
+        // given
+        User user = new User (
+                1L,
+                "Nguyen Trinh An",
+                "0915422217",
+                null,
+                new Card(
+                        1L,
+                        "CMND",
+                        "026031189"
+                )
+        );
+
+        Bank newBank = new Bank(
+                1L,
+                "VCB",
+                "111119704366614626076016",
+                "NGUYEN TRINH AN"
+        );
+
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+        given(bankService.findBankByCode(newBank.getCode())).willReturn(false);
+        // when
+        User newUser = underTest.linkBank(1L, newBank);
+
+        // then
+        assertThat(newUser).isNotEqualTo(user);
     }
 }

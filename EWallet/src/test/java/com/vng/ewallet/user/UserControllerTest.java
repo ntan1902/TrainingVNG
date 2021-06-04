@@ -2,9 +2,12 @@ package com.vng.ewallet.user;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vng.ewallet.bank.Bank;
-import com.vng.ewallet.card.Card;
+import com.vng.ewallet.entity.Bank;
+import com.vng.ewallet.entity.Card;
+import com.vng.ewallet.entity.User;
 import com.vng.ewallet.exception.ApiExceptionHandler;
+import com.vng.ewallet.server.user.UserController;
+import com.vng.ewallet.service.user.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +36,7 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @InjectMocks
     private UserController underTest;
