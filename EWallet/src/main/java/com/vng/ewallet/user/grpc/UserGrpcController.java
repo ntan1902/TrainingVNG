@@ -1,8 +1,8 @@
 package com.vng.ewallet.user.grpc;
 
-import com.vng.ewallet.grpc.model.AllUsersResponse;
-import com.vng.ewallet.grpc.model.EmptyRequest;
-import com.vng.ewallet.grpc.model.UserServiceGrpc;
+import com.google.protobuf.Empty;
+import com.vng.ewallet.grpc.UserItemsResponse;
+import com.vng.ewallet.grpc.UserServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class UserGrpcController extends UserServiceGrpc.UserServiceImplBase {
     }
 
     @Override
-    public void findAllUsers(EmptyRequest request, StreamObserver<AllUsersResponse> responseObserver) {
+    public void findAllUsers(Empty request, StreamObserver<UserItemsResponse> responseObserver) {
         responseObserver.onNext(userService.findAllUsers(request));
         responseObserver.onCompleted();
     }

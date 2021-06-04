@@ -1,11 +1,15 @@
 syntax = "proto3";
 
-package com.vng.ewallet.grpc.model;
+package com.vng.ewallet.grpc;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+
 option java_outer_classname = "UserGrpc";
 option java_multiple_files = true;
 
 service UserService {
-    rpc FindAllUsers(EmptyRequest) returns (AllUsersResponse);
+    rpc FindAllUsers(google.protobuf.Empty) returns (UserItemsResponse);
 //    rpc InsertUser(UserItem) returns (APIResponse);
 //    rpc FindUserById(UserIdRequest) returns (UserItem);
 //    rpc UpdateUserById(UserItem) returns (APIResponse);
@@ -17,7 +21,7 @@ message APIResponse {
     int32 responseCode = 2;
 }
 
-message AllUsersResponse {
+message UserItemsResponse {
     repeated UserItem users = 1;
 }
 
@@ -27,22 +31,19 @@ message UserItem {
     string phoneNumber = 3;
     repeated BankItem banks = 4;
     CardItem card = 5;
-}
 
-message BankItem {
-    int64 id = 1;
-    string bankName = 2;
-    string code = 3;
-    string holderName = 4;
-}
+    message BankItem {
+        int64 id = 1;
+        string bankName = 2;
+        string code = 3;
+        string holderName = 4;
+    }
 
-message CardItem {
-    int64 id = 1;
-    string cardName = 2;
-    string code = 3;
-}
-
-message EmptyRequest {
+    message CardItem {
+        int64 id = 1;
+        string cardName = 2;
+        string code = 3;
+    }
 }
 
 message UserIdRequest {

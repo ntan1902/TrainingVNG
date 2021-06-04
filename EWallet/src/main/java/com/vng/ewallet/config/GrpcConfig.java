@@ -6,7 +6,7 @@ import org.springframework.http.converter.protobuf.ProtobufJsonFormatHttpMessage
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
-public class ApiConfig {
+public class GrpcConfig {
     @Bean
     public ProtobufJsonFormatHttpMessageConverter protobufHttpMessageConverter() {
         return new ProtobufJsonFormatHttpMessageConverter();

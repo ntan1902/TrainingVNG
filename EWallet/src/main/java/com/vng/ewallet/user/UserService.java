@@ -5,6 +5,7 @@ import com.vng.ewallet.bank.BankService;
 import com.vng.ewallet.card.Card;
 import com.vng.ewallet.card.CardService;
 import com.vng.ewallet.exception.ApiRequestException;
+import io.vertx.core.AbstractVerticle;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,9 +33,15 @@ public class UserService {
     }
 
 
+    @Transactional
     public List<User> findAllUsers() {
         log.info("Inside findAllUsers of UserService");
-        return this.userRepository.findAll();
+
+        List<User> users = this.userRepository.findAll();
+        Hibernate.initialize(users);
+        users.forEach(user -> Hibernate.initialize(user.getBanks()));
+
+        return users;
     }
 
     @CachePut(value = "users", key = "#id")

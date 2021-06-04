@@ -1,30 +1,41 @@
 package com.vng.ewallet;
 
 import com.vng.ewallet.bank.Bank;
-import com.vng.ewallet.bank.BankRepository;
 import com.vng.ewallet.card.Card;
 import com.vng.ewallet.user.User;
 import com.vng.ewallet.user.UserRepository;
+import com.vng.ewallet.user.verticle.UserVerticle;
+import io.vertx.core.Vertx;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 @SpringBootApplication
 @EnableCaching
 @RequiredArgsConstructor
 public class EWalletApplication implements CommandLineRunner {
-
     public static void main(String[] args) {
         SpringApplication.run(EWalletApplication.class, args);
     }
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserVerticle userVerticle;
 
+    @PostConstruct
+    public void deployVerticle() {
+        Vertx vertx = Vertx.vertx();
+        vertx.deployVerticle(userVerticle);
+    }
+
+    // Create dummy data for testing
+    private final UserRepository userRepository;
     @Override
     @Transactional
     public void run(String... args) throws Exception {
