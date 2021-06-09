@@ -1,5 +1,6 @@
 package com.vng.ewallet.service.card.impl;
 
+import com.vng.ewallet.exception.ApiRequestException;
 import com.vng.ewallet.factory.card.CardCheck;
 import com.vng.ewallet.factory.card.CardFactory;
 import com.vng.ewallet.entity.Card;
@@ -31,21 +32,21 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card insertCard(Card card) {
+    public Card insertCard(Card card) throws ApiRequestException {
         log.info("Inside insertCard of CardService");
         checkIfCardIsValidate(card);
         return this.cardRepository.save(card);
     }
 
     @Override
-    public void checkIfCardIsValidate(Card card) {
+    public void checkIfCardIsValidate(Card card) throws ApiRequestException {
         log.info("Inside checkIfCardIsValidate of CardService");
         CardCheck cardCheck = CardFactory.getCardCheck(card.getCardName());
         cardCheck.check(card);
     }
 
     @Override
-    public Card updateCard(Long id, Card card) {
+    public Card updateCard(Long id, Card card) throws ApiRequestException{
         log.info("Inside updateCard of CardService");
         // Check if card is exist
         Optional<Card> optionalCard = this.cardRepository.findById(id);
@@ -67,7 +68,7 @@ public class CardServiceImpl implements CardService {
             return true;
         } else {
             log.error("Inside deleteCard of CardService: Card doesn't exist");
+            throw new ApiRequestException("Card doesn't exist");
         }
-        return false;
     }
 }

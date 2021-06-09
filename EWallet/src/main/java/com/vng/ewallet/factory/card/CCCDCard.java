@@ -7,7 +7,7 @@ import com.vng.ewallet.util.Regex;
 public class CCCDCard implements CardCheck {
     @Override
     public void check(Card card) {
-        if(Regex.checkRegex(card.getCode(), "^\\d{12}$")) {
+        if(!Regex.checkRegex(card.getCode(), "^\\d{12}$")) {
             throw new ApiRequestException("Invalid card code");
         }
     }

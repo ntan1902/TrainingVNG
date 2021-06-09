@@ -21,7 +21,7 @@ public class BankFactory {
         return map;
     }
 
-    public static final BankCheck getBankCheck(String bankName){
+    public static final BankCheck getBankCheck(String bankName) throws ApiRequestException{
         return Optional
                 .ofNullable(map.get(bankName))
                 .orElseThrow(() -> new ApiRequestException(bankName + " is not supported"));

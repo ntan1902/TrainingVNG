@@ -9,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 public class VCBBank implements BankCheck {
 
     @Override
-    public void check(Bank bank) {
+    public void check(Bank bank) throws ApiRequestException{
         if (!checkCode(bank.getCode())) {
             log.error("Inside check of VCBBank: Invalid bank code");
             throw new ApiRequestException("Invalid bank code");

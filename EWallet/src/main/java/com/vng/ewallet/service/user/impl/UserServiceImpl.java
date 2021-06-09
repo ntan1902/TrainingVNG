@@ -3,6 +3,7 @@ package com.vng.ewallet.service.user.impl;
 import com.vng.ewallet.entity.Bank;
 import com.vng.ewallet.service.bank.BankService;
 import com.vng.ewallet.entity.Card;
+import com.vng.ewallet.service.card.CardService;
 import com.vng.ewallet.service.card.impl.CardServiceImpl;
 import com.vng.ewallet.exception.ApiRequestException;
 import com.vng.ewallet.service.user.UserService;
@@ -26,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final CardServiceImpl cardService;
+    private final CardService cardService;
     private final BankService bankService;
 
     @Transactional
@@ -35,7 +36,8 @@ public class UserServiceImpl implements UserService {
         log.info("Inside findAllUsers of UserService");
 
         List<User> users = this.userRepository.findAll();
-        Hibernate.initialize(users);
+
+//        Hibernate.initialize(users);
         users.forEach(user -> Hibernate.initialize(user.getBanks()));
 
         return users;
@@ -43,21 +45,21 @@ public class UserServiceImpl implements UserService {
 
     @CachePut(value = "users", key = "#id")
     @Override
-    public User insertUser(User user) {
+    public User insertUser(User user) throws ApiRequestException {
         log.info("Inside insertUser of UserService");
         checkCard(user.getCard());
         checkBanks(user.getBanks());
         return this.userRepository.save(user);
     }
 
-    public void checkBanks(List<Bank> banks) {
+    public void checkBanks(List<Bank> banks) throws ApiRequestException {
         log.info("Inside checkBanks of UserService");
         if (banks != null) {
             banks.forEach(bankService::checkIfBankIsValidate);
         }
     }
 
-    public void checkCard(Card card) {
+    public void checkCard(Card card) throws ApiRequestException{
         log.info("Inside checkCard of UserService");
         if (card != null) {
             this.cardService.checkIfCardIsValidate(card);
@@ -68,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @CachePut(value = "users", key = "#id")
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, User user) throws ApiRequestException {
         log.info("Inside updateUser of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
     @CacheEvict(value = "users", key = "#id", allEntries = false)
     @Override
-    public boolean deleteUser(Long id) {
+    public boolean deleteUser(Long id) throws ApiRequestException {
         log.info("Inside deleteUser of UserService");
         if (this.userRepository.existsById(id)) {
             this.userRepository.deleteById(id);
@@ -116,7 +118,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Bank> findAllBanks(Long id) {
+    public List<Bank> findAllBanks(Long id) throws ApiRequestException {
         log.info("Inside findAllBanks of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -129,37 +131,42 @@ public class UserServiceImpl implements UserService {
 
     @CachePut(value = "users", key = "#id")
     @Override
-    public User linkBank(Long id, Bank bank) {
+    public User linkBank(Long id, Bank bank) throws ApiRequestException {
         log.info("Inside linkBank of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            // Find User
-            User user = optionalUser.get();
+
+        try {
+            // Check if User exists
+            if (optionalUser.isEmpty()) {
+                throw new ApiRequestException("User doesn't exist");
+            }
 
             // Check if bank exists in another account of user.
             if (this.bankService.findBankByCode(bank.getCode())) {
-                log.error("Inside linkBank of UserService: Bank already exists");
                 throw new ApiRequestException("Bank already exists");
             }
 
-            // Check if bank is validate
-            bankService.insertBank(bank);
-
-            log.debug("Bank is checked validation");
-            // Insert into bank table.
-            // If success, then save bank into user account.
-            List<Bank> banks = user.getBanks();
-            if(banks == null) {
-                banks = new ArrayList<>();
-            }
-            banks.add(bank);
-            user.setBanks(banks);
-
-            return this.userRepository.save(user);
-
-        } else {
-            log.error("Inside linkBank of UserService: User doesn't exist");
-            throw new ApiRequestException("User doesn't exist");
+            // Check if bank is validated
+//            bankService.insertBank(bank);
+            bankService.checkIfBankIsValidate(bank);
+        } catch (ApiRequestException e) {
+            log.error(e.getMessage());
+            throw e;
         }
+
+        // Find User
+        User user = optionalUser.get();
+        log.debug("Bank is checked validated");
+
+        // Insert into bank table.
+        // If success, then save bank into user account.
+        List<Bank> banks = user.getBanks();
+        if (banks == null) {
+            banks = new ArrayList<>();
+        }
+        banks.add(bank);
+        user.setBanks(banks);
+
+        return this.userRepository.save(user);
     }
 }

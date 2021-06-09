@@ -19,7 +19,7 @@
         <grpc.version>1.38.0</grpc.version>
         <protobuf.version>3.17.0</protobuf.version>
         <protobufjavaformat.version>1.4</protobufjavaformat.version>
-        <vertx.version>3.5.4</vertx.version>
+        <vertx.version>4.1.0</vertx.version>
     </properties>
 
     <dependencies>

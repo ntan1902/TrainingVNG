@@ -1,12 +1,14 @@
 package com.vng.ewallet.factory.card;
 
 import com.vng.ewallet.exception.ApiRequestException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class CardFactory {
     private static final Map<String, CardCheck> map = new HashMap<>();
 

@@ -1,19 +1,19 @@
 syntax = "proto3";
 
-package com.vng.ewallet.grpc;
+package grpc.user;
 
-import "google/protobuf/any.proto";
 import "google/protobuf/empty.proto";
-
+import "bank.proto";
+import "card.proto";
 option java_outer_classname = "UserGrpc";
 option java_multiple_files = true;
 
 service UserService {
-    rpc FindAllUsers(google.protobuf.Empty) returns (UserItemsResponse);
-//    rpc InsertUser(UserItem) returns (APIResponse);
-//    rpc FindUserById(UserIdRequest) returns (UserItem);
-//    rpc UpdateUserById(UserItem) returns (APIResponse);
-//    rpc DeleteUserById(UserIdRequest) returns (APIResponse);
+    rpc FindAllUserItems(google.protobuf.Empty) returns (UserItemsResponse);
+    rpc InsertUserItem(UserItem) returns (UserItem);
+    rpc FindUserItemById(UserIdRequest) returns (UserItem);
+    rpc UpdateUserItemById(UserItem) returns (UserItem);
+    rpc DeleteUserItemById(UserIdRequest) returns (APIResponse);
 }
 
 message APIResponse {
@@ -29,21 +29,11 @@ message UserItem {
     int64 id = 1;
     string userName = 2;
     string phoneNumber = 3;
-    repeated BankItem banks = 4;
-    CardItem card = 5;
+    repeated grpc.bank.BankItem banks = 4;
+    grpc.card.CardItem card = 5;
 
-    message BankItem {
-        int64 id = 1;
-        string bankName = 2;
-        string code = 3;
-        string holderName = 4;
-    }
 
-    message CardItem {
-        int64 id = 1;
-        string cardName = 2;
-        string code = 3;
-    }
+
 }
 
 message UserIdRequest {

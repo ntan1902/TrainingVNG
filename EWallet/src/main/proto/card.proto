@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package grpc.card;
+
+option java_outer_classname = "CardGrpc";
+option java_multiple_files = true;
+
+message CardItem {
+  int64 id = 1;
+  string cardName = 2;
+  string code = 3;
+}

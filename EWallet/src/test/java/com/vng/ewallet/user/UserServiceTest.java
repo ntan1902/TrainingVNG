@@ -473,10 +473,11 @@ class UserServiceTest {
 
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
         given(bankService.findBankByCode(newBank.getCode())).willReturn(false);
+
         // when
         User newUser = underTest.linkBank(1L, newBank);
 
         // then
         assertThat(newUser).isNotEqualTo(user);
-    }
+   }
 }

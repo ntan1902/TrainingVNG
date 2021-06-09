@@ -2,6 +2,7 @@ package com.vng.ewallet.service.bank.impl;
 
 import com.vng.ewallet.entity.Bank;
 import com.vng.ewallet.entity.BankRepository;
+import com.vng.ewallet.exception.ApiRequestException;
 import com.vng.ewallet.factory.bank.BankFactory;
 import com.vng.ewallet.factory.bank.BankCheck;
 import com.vng.ewallet.service.bank.BankService;
@@ -34,7 +35,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public Bank insertBank(Bank bank) {
+    public Bank insertBank(Bank bank) throws ApiRequestException{
         log.info("Inside insertBank of BankService");
         checkIfBankIsValidate(bank);
         return this.bankRepository.save(bank);
@@ -43,14 +44,14 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public void checkIfBankIsValidate(Bank bank) {
+    public void checkIfBankIsValidate(Bank bank) throws ApiRequestException{
         log.info("Inside checkIfBankIsValidate of BankService");
         BankCheck bankCheck = BankFactory.getBankCheck(bank.getBankName());
         bankCheck.check(bank);
     }
 
     @Override
-    public Bank updateBank(Long id, Bank bank) {
+    public Bank updateBank(Long id, Bank bank) throws ApiRequestException{
         log.info("Inside updateBank of BankService");
         Optional<Bank> optionalBank = this.bankRepository.findById(id);
         if (optionalBank.isPresent()) {
