@@ -101,8 +101,17 @@ public class UserGrpcServiceImpl implements UserGrpcService {
 
     @Override
     public APIResponse deleteUserItemById(UserIdRequest request) {
-        // TODO
-        return null;
+        log.info("Inside deleteUserItemById of UserGrpcServiceImpl");
+        if (this.userRepository.existsById((long) request.getId())) {
+            this.userRepository.deleteById((long) request.getId());
+            return APIResponse.newBuilder()
+                    .setResponseCode(200)
+                    .setResponseMessage("Delete successfully")
+                    .build();
+        } else {
+            log.error("Inside deleteUserItemById of UserGrpcServiceImpl: User doesn't exist");
+            throw new ApiRequestException("User doesn't exist");
+        }
     }
 
     private UserItem convertToUserItem(User user) {

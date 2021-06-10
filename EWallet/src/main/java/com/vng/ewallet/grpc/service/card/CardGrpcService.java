@@ -4,13 +4,13 @@ import grpc.card.CardItem;
 
 public interface CardGrpcService {
 
-    CardItem findCardById(Long id);
+    CardItem findCardItemById(Long id);
 
     CardItem insertCardItem(CardItem cardItem);
 
     void checkIfCardItemIsValidate(CardItem cardItem);
 
-    CardItem updateCardItem(Long id, CardItem cardItem);
+    CardItem updateCardItem(CardItem cardItem);
 
     boolean deleteCardItem(Long id);
 }

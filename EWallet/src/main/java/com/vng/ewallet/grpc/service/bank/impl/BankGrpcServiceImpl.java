@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @Log4j2
@@ -21,13 +23,14 @@ public class BankGrpcServiceImpl implements BankGrpcService {
 
     @Override
     public boolean findBankItemByCode(String code) {
-        // TODO
-        return false;
+        log.info("Inside findBankItem of BankItemServiceImpl");
+        Bank optionalBank = this.bankRepository.findBankByCode(code);
+        return optionalBank != null;
     }
 
     @Override
     public BankItem insertBankItem(BankItem bankItem) throws ApiRequestException{
-        log.info("Inside insertBank of BankService");
+        log.info("Inside insertBankItem of BankGrpcServiceImpl");
 
         checkIfBankItemIsValidate(bankItem);
 
@@ -39,13 +42,31 @@ public class BankGrpcServiceImpl implements BankGrpcService {
 
     @Override
     public BankItem updateBankItem(BankItem bankItem) {
-        // TODO
+        log.info("Inside updateBankItem of BankGrpcServiceImpl");
+        Optional<Bank> optionalBank = this.bankRepository.findById(bankItem.getId());
+        if (optionalBank.isPresent()) {
+            // Check validate new bank
+            checkIfBankItemIsValidate(bankItem);
+
+            this.bankRepository.save(this.convertToBank(bankItem));
+
+            return bankItem;
+        } else {
+            log.error("Inside updateBankItem of BankGrpcServiceImpl: Bank doesn't exist");
+        }
+
         return null;
     }
 
     @Override
     public boolean deleteBankItem(Long id) {
-        // TODO
+        log.info("Inside deleteBankItem of BankGrpcServiceImpl");
+        if (this.bankRepository.existsById(id)) {
+            this.bankRepository.deleteById(id);
+            return true;
+        } else {
+            log.error("Inside deleteBankItem of BankGrpcServiceImpl: Bank doesn't exist");
+        }
         return false;
     }
 

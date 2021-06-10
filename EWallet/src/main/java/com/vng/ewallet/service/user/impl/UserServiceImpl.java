@@ -35,12 +35,9 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllUsers() {
         log.info("Inside findAllUsers of UserService");
 
-        List<User> users = this.userRepository.findAll();
+        //        users.forEach(user -> Hibernate.initialize(user.getBanks()));
 
-//        Hibernate.initialize(users);
-        users.forEach(user -> Hibernate.initialize(user.getBanks()));
-
-        return users;
+        return this.userRepository.findAll();
     }
 
     @CachePut(value = "users", key = "#id")

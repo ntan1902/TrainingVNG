@@ -6,17 +6,17 @@ import com.vng.ewallet.entity.User;
 import java.util.List;
 
 public interface UserService {
-    public List<User> findAllUsers();
+    List<User> findAllUsers();
 
-    public User insertUser(User user);
+    User insertUser(User user);
 
-    public User updateUser(Long id, User user);
+    User updateUser(Long id, User user);
 
-    public boolean deleteUser(Long id);
+    boolean deleteUser(Long id);
 
-    public User findUserById(Long id);
+    User findUserById(Long id);
 
-    public List<Bank> findAllBanks(Long id);
+    List<Bank> findAllBanks(Long id);
 
-    public User linkBank(Long id, Bank bank);
+    User linkBank(Long id, Bank bank);
 }
