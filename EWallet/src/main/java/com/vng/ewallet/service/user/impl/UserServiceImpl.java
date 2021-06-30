@@ -18,9 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -49,14 +47,14 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.save(user);
     }
 
-    public void checkBanks(List<Bank> banks) throws ApiRequestException {
+    public void checkBanks(Set<Bank> banks) throws ApiRequestException {
         log.info("Inside checkBanks of UserService");
         if (banks != null) {
             banks.forEach(bankService::checkIfBankIsValidate);
         }
     }
 
-    public void checkCard(Card card) throws ApiRequestException{
+    public void checkCard(Card card) throws ApiRequestException {
         log.info("Inside checkCard of UserService");
         if (card != null) {
             this.cardService.checkIfCardIsValidate(card);
@@ -101,21 +99,15 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Long id) {
         log.info("Inside findUserById of UserService");
 
-        Optional<User> optionalUser = this.userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            log.info("Fetch from table User");
-            User user = optionalUser.get();
+        User user = this.userRepository.findById(id)
+                .orElse(null);
+        log.info("Fetch from table User");
 
-            // User this function of Hibernate to initialize proxy for FetchType.LAZY
-            Hibernate.initialize(user.getBanks());
-            return user;
-        } else {
-            return null;
-        }
+        return user;
     }
 
     @Override
-    public List<Bank> findAllBanks(Long id) throws ApiRequestException {
+    public Set<Bank> findAllBanks(Long id) throws ApiRequestException {
         log.info("Inside findAllBanks of UserService");
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isPresent()) {
@@ -157,9 +149,9 @@ public class UserServiceImpl implements UserService {
 
         // Insert into bank table.
         // If success, then save bank into user account.
-        List<Bank> banks = user.getBanks();
+        Set<Bank> banks = user.getBanks();
         if (banks == null) {
-            banks = new ArrayList<>();
+            banks = new HashSet<>();
         }
         banks.add(bank);
         user.setBanks(banks);

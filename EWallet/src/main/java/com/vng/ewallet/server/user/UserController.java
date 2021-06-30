@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/api/v1/users")
@@ -72,8 +73,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}/banks")
-    public ResponseEntity<List<Bank>> findAllBanks(@PathVariable("id") Long id) {
-        List<Bank> banksUser = this.userService.findAllBanks(id);
+    public ResponseEntity<Set<Bank>> findAllBanks(@PathVariable("id") Long id) {
+        Set<Bank> banksUser = this.userService.findAllBanks(id);
         if (banksUser != null) {
             return new ResponseEntity<>(banksUser, HttpStatus.OK);
         }

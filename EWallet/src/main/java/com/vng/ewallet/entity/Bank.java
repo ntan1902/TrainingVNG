@@ -28,9 +28,8 @@ public class Bank implements Serializable {
     @NotBlank(message = "Holder name can not be blank")
     private String holderName;
 
-//    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//    @NotNull(message = "User id can not be undefined")
+//    @ManyToOne()
+//    @JoinColumn(name = "user_id")
 //    private User user;
 
 }

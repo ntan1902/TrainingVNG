@@ -24,9 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.BDDMockito.given;
 
@@ -60,7 +58,7 @@ class UserControllerTest {
         users.add(new User(1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -262,7 +260,7 @@ class UserControllerTest {
     @Test
     void canFindAllBanksOfUser() throws Exception {
         // given
-        List<Bank> banks = new ArrayList<>();
+        Set<Bank> banks = new HashSet<>();
         banks.add(new Bank(
                 1L,
                 "VCB",
@@ -321,7 +319,7 @@ class UserControllerTest {
                 "NGUYEN TRINH AN"
         );
 
-        User user = new User(1L, "", "", Collections.singletonList(bank), null);
+        User user = new User(1L, "", "", Collections.singleton(bank), null);
         given(userService.linkBank(1L, bank)).willReturn(user);
 
         // when

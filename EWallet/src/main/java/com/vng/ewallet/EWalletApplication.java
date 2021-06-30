@@ -40,7 +40,7 @@ public class EWalletApplication implements CommandLineRunner {
                 new User(1L,
                         "ntan1902",
                         "091542217",
-                        Collections.singletonList(
+                        Collections.singleton(
                                 new Bank(1L, "VCB", "9704366614626076016", "NGUYEN TRINH AN")
                         ),
                         new Card(
@@ -56,13 +56,13 @@ public class EWalletApplication implements CommandLineRunner {
                         2L,
                         "ohnguyen",
                         "0934645079",
-                        Collections.singletonList(
+                        Collections.singleton(
                                 new Bank(2L, "SCB", "950436661678", "ON HAO NGUYEN")
                         ),
                         new Card(
                                 2L,
                                 "CMND",
-                                "026117869"
+                                "026522875"
                         )
                 )
         );
@@ -71,13 +71,13 @@ public class EWalletApplication implements CommandLineRunner {
                         3L,
                         "nthao",
                         "089535789",
-                        Collections.singletonList(
+                        Collections.singleton(
                                 new Bank(3L, "OCB", "0135557879", "NGUYEN TAN HAO")
                         ),
                         new Card(
                                 3L,
                                 "CMND",
-                                "026031189"
+                                "026548659"
                         )
                 )
         );

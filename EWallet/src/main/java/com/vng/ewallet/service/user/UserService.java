@@ -4,6 +4,7 @@ import com.vng.ewallet.entity.Bank;
 import com.vng.ewallet.entity.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<User> findAllUsers();
@@ -16,7 +17,7 @@ public interface UserService {
 
     User findUserById(Long id);
 
-    List<Bank> findAllBanks(Long id);
+    Set<Bank> findAllBanks(Long id);
 
     User linkBank(Long id, Bank bank);
 }

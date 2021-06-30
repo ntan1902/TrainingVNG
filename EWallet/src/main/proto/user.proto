@@ -31,9 +31,6 @@ message UserItem {
     string phoneNumber = 3;
     repeated grpc.bank.BankItem banks = 4;
     grpc.card.CardItem card = 5;
-
-
-
 }
 
 message UserIdRequest {

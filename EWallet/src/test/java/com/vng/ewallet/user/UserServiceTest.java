@@ -51,7 +51,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -112,7 +112,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -141,7 +141,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -161,7 +161,7 @@ class UserServiceTest {
                 1L,
                 "On Hao Nguyen",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -195,7 +195,7 @@ class UserServiceTest {
                 1L,
                 "On Hao Nguyen",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -228,7 +228,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -272,7 +272,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -316,7 +316,7 @@ class UserServiceTest {
                 1L,
                 "Nguyen Trinh An",
                 "0915422217",
-                Collections.singletonList(
+                Collections.singleton(
                         new Bank(
                                 1L,
                                 "VCB",
@@ -333,7 +333,7 @@ class UserServiceTest {
         given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
         // when
-        List<Bank> banks = underTest.findAllBanks(user.getId());
+        Set<Bank> banks = underTest.findAllBanks(user.getId());
 
         // then
         assertThat(user.getBanks()).isEqualTo(banks);
@@ -354,7 +354,7 @@ class UserServiceTest {
     @Test
     void canLinkBank() {
         // given
-        List<Bank> banks = new ArrayList<>();
+        Set<Bank> banks = new HashSet<>();
         banks.add(new Bank(
                 1L,
                 "VCB",
@@ -412,7 +412,7 @@ class UserServiceTest {
     @Test
     void canNotLinkExistedBank() {
         // given
-        List<Bank> banks = new ArrayList<>();
+        Set<Bank> banks = new HashSet<>();
         banks.add(new Bank(
                 1L,
                 "VCB",

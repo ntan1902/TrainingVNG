@@ -21,9 +21,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Log4j2
@@ -59,11 +57,15 @@ public class UserGrpcServiceImpl implements UserGrpcService {
 
     @Transactional
     public UserItem findUserItemById(UserIdRequest request) {
-        User user = this.userRepository
-                .findById((long) request.getId())
-                .get();
-
-        return convertToUserItem(user);
+        try {
+            User user = this.userRepository
+                    .findById((long) request.getId())
+                    .get();
+            return convertToUserItem(user);
+        } catch(Exception e) {
+            log.error(e);
+            return null;
+        }
     }
 
 
@@ -114,9 +116,10 @@ public class UserGrpcServiceImpl implements UserGrpcService {
         }
     }
 
-    private UserItem convertToUserItem(User user) {
+    @Transactional
+    public UserItem convertToUserItem(User user) {
         // Mapping Bank into BankItem
-        List<BankItem> bankItems = new LinkedList<>();
+        Set<BankItem> bankItems = new HashSet<>();
 
         Hibernate.initialize(user.getBanks());
         user.getBanks().forEach(bank -> {
@@ -152,7 +155,7 @@ public class UserGrpcServiceImpl implements UserGrpcService {
 
     public User convertToUser(UserItem userItem){
         // Mapping BankItem into Bank
-        List<Bank> banks = new LinkedList<>();
+        Set<Bank> banks = new HashSet<>();
 
         userItem.getBanksList().forEach(bankItem -> {
             banks.add(new Bank(
